@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
+use App\Livewire\Admin\Dashboard;
+use App\Livewire\Member\Mypage;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsMember;
 
 Route::get('/', function () {
     return view('index');
@@ -33,3 +37,17 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// adminの管理画面
+Route::middleware(['auth'])->group(function(){
+    Route::get('/admin/dashboard', Dashboard::class)
+    ->middleware('is_admin')
+    ->name('admin.dashboard');
+});
+
+// memberのmypage（管理画面）
+Route::middleware(['auth'])->group(function(){
+    Route::get('/member/mypage', Mypage::class)
+    ->middleware('is_member')
+    ->name('member.mypage');
+});

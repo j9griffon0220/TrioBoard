@@ -12,6 +12,7 @@ use Laravel\Fortify\Features;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
+use App\Enums\Role;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|string|email')]
@@ -49,7 +50,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        // ロールに応じてリダイレクト先を変更
+        $user = auth()->user();
+
+        if($user->role === Role::Admin){
+            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        } else{
+            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        }
+        // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 
     /**

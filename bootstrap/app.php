@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // admin専用ミドルウェアを追加
+        $middleware->alias([
+            'is_admin' => \App\Http\Middleware\IsAdmin::class,
+            'is_member' => \App\Http\middleware\IsMember::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -20,6 +20,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    // 代入を許可するカラム
     protected $fillable = [
         'name',
         'email',
@@ -61,5 +62,18 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    // リレーション（他のモデルとのつながり）
+    // 1人のユーザーは複数のThreadを持つ
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
+
+    // 1人のユーザーは複数のPostsを持つ
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

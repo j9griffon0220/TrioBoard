@@ -19,7 +19,7 @@ class ThreadFactory extends Factory
     {
         return [
             // idとtimestampは自動生成されるので指定しない
-            'title' => fake()->sentence(),
+            'title' => fake('ja_JP')->sentence(),
             // user_idを既存のUserモデルと紐付ける
             'user_id' => User::factory(),
         ];

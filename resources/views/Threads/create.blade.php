@@ -8,4 +8,8 @@
     <input type="text" name="title" />
     <button type="submit">スレッド作成</button>
 </form>
+@error('title')
+<div>{{ $message }}</div>
+@enderror
+
 @endsection

@@ -8,6 +8,7 @@ use App\Livewire\Member\Mypage;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsMember;
 use App\Http\Controllers\ThreadController;
+use App\Livewire\PostList;
 use App\Livewire\PostForm;
 
 Route::get('/', function () {
@@ -55,7 +56,10 @@ Route::middleware(['auth'])->group(function(){
 });
 
 // Threadのリソースルート
-Route::resource('threads', ThreadController::class);
+Route::resource('/threads', ThreadController::class);
 
-// Postのlivewireモダール（投稿部分）ルート
+// Postの投稿一覧（livewireモダール）ルート
+Route::get('/post-list', PostList::class);
+
+// Postの投稿部分（livewireモダール）ルート
 Route::get('/post-form', PostForm::class);

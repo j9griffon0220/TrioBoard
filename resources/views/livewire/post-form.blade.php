@@ -5,7 +5,15 @@
     <input type="text" wire:model="title" placeholder="タイトル">
     <textarea wire:model="body" placeholder="投稿本文"></textarea>
 
-    @if ($isEditing)
+    <form wire:submit.prevent="store">
+        <button type="submit">投稿を保存</button>
+    </form>
+
+    {{-- 投稿されたpostを編集するためのコンポーネント --}}
+    <livewire:edit-post-form :post="$post" />
+
+
+    {{-- @if ($isEditing)
         <form wire:submit.prevent="destroy">
             <button type="submit">投稿を破棄</button>
         </form>
@@ -13,5 +21,5 @@
         <form wire:submit.prevent="store">
             <button type="submit">投稿を保存</button>
         </form>
-    @endif
+    @endif --}}
 </div>

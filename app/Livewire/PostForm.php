@@ -7,9 +7,22 @@ use App\Models\Post;
 
 class PostForm extends Component
 {
+    // public $threadId = '';
+    public $post;
+    public $postId = '';
     public $title = '';
     public $body = '';
     public $isEditing = false;
+
+    public function mount($threadId)
+    {
+        $this->threadId = $threadId;
+    }
+
+    public function render()
+    {
+        return view('livewire.post-form');
+    }
 
     // コンポーネント単位でバリデーション
     protected $rules = [
@@ -22,26 +35,18 @@ class PostForm extends Component
         $this->validate();
 
         Post::create([
+            'thread_id' => $this->threadId,
             'title' => $this->title,
             'body' => $this->body,
             'user_id' => auth()->id(),
         ]);
 
         //フォームを初期化
-        $this->reset();
-    }
+        $this->reset(['title','body']);
 
-    // 投稿者のみが投稿を破棄可能にする
-    public function destroy(){
-        if(auth()->id() !== $this->post->user_id){
-            abort(403, '許可されていません。投稿者本人のみ可能です');
-        }
-        $this->post->delete();
-        session()->flash('success', '投稿を破棄しました');
+        // 投稿イベントを親に知らせる
+        // dispatch()とどちらが良いのか検討中
+        $this->emitUp('postAdded', $post->id);
     }
 }
 
-    // public function render()
-    // {
-    //     return view('livewire.post-form');
-    // }

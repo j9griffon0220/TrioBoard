@@ -52,11 +52,13 @@ class ThreadController extends Controller
 
     /**
      * Display the specified resource.
-     * 詳細
+     * 個別のスレッド（1件）を表示
      */
     public function show(string $id)
     {
-        //
+        // スレッドIDに対応するThreadモデルを取得
+        $selectedthread = Thread::findOrFail($id);
+        return view('threads.show', compact('selectedthread'));
     }
 
     /**

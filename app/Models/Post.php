@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Thread;
 
 class Post extends Model
 {
@@ -21,12 +23,14 @@ class Post extends Model
 
     // リレーション（他のモデルとのつながり）
     // ポスト（投稿）には1人の作成したユーザーがいる
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
     // ポスト（投稿）には所属するThreadが1つある
-    public function thread(){
-        return $this->belongTo(Thread::class);
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 }

@@ -15,6 +15,6 @@
     {{-- フッター --}}
     @include('layouts.board_footer')
     </div>
-
+    @livewireScripts
 </body>
 </html>

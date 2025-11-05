@@ -58,8 +58,9 @@ Route::middleware(['auth'])->group(function(){
 // Threadのリソースルート
 Route::resource('/threads', ThreadController::class);
 
+// livewireはコンポーネントとして部品扱いするので、ルーティングで直接読み込まない
 // Postの投稿一覧（livewireモダール）ルート
-Route::get('/post-list', PostList::class);
+// Route::get('/post-list', PostList::class);
 
 // Postの投稿部分（livewireモダール）ルート
-Route::get('/post-form', PostForm::class);
+// Route::get('/post-form', PostForm::class);

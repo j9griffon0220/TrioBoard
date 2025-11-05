@@ -1,7 +1,7 @@
 <div>
     {{-- The best athlete wants his opponent at his best. --}}
     <h1>これはlivewireのポスト一覧です</h1>
-    @forelse($posts as $post)
+    @forelse($this->posts as $post)
     {{-- postごとにまとめる --}}
     <div>
         {{-- <p>{{ $post->user->name }}</p> --}}
@@ -11,9 +11,7 @@
         <p>{{ $post->body }}</p>
     </div>
     @empty
-    <p>まだ投稿がありません</p>
+    <p>投稿がまだありません</p>
     @endforelse
 
-    {{-- 投稿用のlivewireコンポーネント --}}
-    <livewire:post-form :thread-id="$thread->id" />
 </div>

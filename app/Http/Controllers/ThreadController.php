@@ -29,7 +29,6 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        //
         return view('threads.create');
     }
 
@@ -54,11 +53,12 @@ class ThreadController extends Controller
      * Display the specified resource.
      * 個別のスレッド（1件）を表示
      */
-    public function show(string $id)
+    public function show(Thread $thread)
     {
         // スレッドIDに対応するThreadモデルを取得
-        $selectedthread = Thread::findOrFail($id);
-        return view('threads.show', compact('selectedthread'));
+        // $selectedthread = Thread::findOrFail($id);
+        // dd($thread);
+        return view('threads.show', compact('thread'));
     }
 
     /**

@@ -2,24 +2,19 @@
     {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
     <h1>投稿フォーム</h1>
 
-    <input type="text" wire:model="title" placeholder="タイトル">
-    <textarea wire:model="body" placeholder="投稿本文"></textarea>
-
     <form wire:submit.prevent="store">
+        <input type="text" wire:model="title" placeholder="タイトル">
+        {{-- バリデーション表示 --}}
+        @error('title')
+            <div>{{ $message }}</div>
+        @enderror
+
+        <textarea wire:model="body" placeholder="投稿本文"></textarea>
+        @error('body')
+            <div>{{ $message }}</div>
+        @enderror
+
         <button type="submit">投稿を保存</button>
     </form>
 
-    {{-- 投稿されたpostを編集するためのコンポーネント --}}
-    <livewire:edit-post-form :post="$post" />
-
-
-    {{-- @if ($isEditing)
-        <form wire:submit.prevent="destroy">
-            <button type="submit">投稿を破棄</button>
-        </form>
-    @else
-        <form wire:submit.prevent="store">
-            <button type="submit">投稿を保存</button>
-        </form>
-    @endif --}}
 </div>

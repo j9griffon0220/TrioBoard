@@ -3,21 +3,24 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Thread;
 use App\Models\Post;
 
 class PostForm extends Component
 {
-    // public $threadId = '';
-    public $post;
+    // public Thread $selectedthread;
+    public Thread $thread;
+
+    public function mount(Thread $thread)
+    {
+        $this->thread = $thread;
+    }
+
+    public $posts = [];
     public $postId = '';
     public $title = '';
     public $body = '';
     public $isEditing = false;
-
-    public function mount($threadId)
-    {
-        $this->threadId = $threadId;
-    }
 
     public function render()
     {
@@ -32,21 +35,21 @@ class PostForm extends Component
 
     public function store()
     {
+        // バリデーションを実行
         $this->validate();
 
-        Post::create([
-            'thread_id' => $this->threadId,
+        // 選択中スレッドに投稿を紐付ける（リレーション経由で子モデルを作成）
+        $post = $this->thread->posts()->create([
             'title' => $this->title,
             'body' => $this->body,
             'user_id' => auth()->id(),
         ]);
 
+        // 投稿イベントを親に知らせる
+        $this->dispatch('postAdded', post: $post);
+
         //フォームを初期化
         $this->reset(['title','body']);
-
-        // 投稿イベントを親に知らせる
-        // dispatch()とどちらが良いのか検討中
-        $this->emitUp('postAdded', $post->id);
     }
 }
 

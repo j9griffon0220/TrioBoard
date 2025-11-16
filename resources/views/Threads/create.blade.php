@@ -12,4 +12,9 @@
 <div>{{ $message }}</div>
 @enderror
 
+{{-- スレッド一覧に戻るボタン --}}
+<button>
+    <a href="{{ route('threads.index') }}">スレッド一覧に戻る</a>
+</button>
+
 @endsection

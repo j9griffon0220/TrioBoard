@@ -10,11 +10,15 @@ use App\Http\Middleware\IsMember;
 use App\Http\Controllers\ThreadController;
 use App\Livewire\PostList;
 use App\Livewire\PostForm;
+use App\Enums\Role;
 
 Route::get('/', function () {
     return view('index');
     // return view('welcome');
 })->name('home');
+
+// デバッグ
+// dd(app(Laravel\Fortify\Contracts\LoginResponse::class));
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

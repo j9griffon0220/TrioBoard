@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Thread;
 use Illuminate\Http\Request;
+use App\Policies\ThreadPolicy;
 
 use function Avifinfo\read;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 // Threadのリソースコントローラー
 // Postの部分はlivewireが担当
 
 class ThreadController extends Controller
 {
+    // これで authorize() が使えるようになる
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      * 一覧
@@ -29,6 +35,8 @@ class ThreadController extends Controller
      */
     public function create()
     {
+        // authorizeでThreadPolicyを適用する
+        $this->authorize('create', Thread::class);
         return view('threads.create');
     }
 
@@ -42,9 +50,10 @@ class ThreadController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:30',
         ]);
-        // Thread::create($validated);
+
         $thread = Thread::create([
             'title' => $validated['title'],
+            'user_id' => auth()->id(),
         ]);
         return redirect()->route('threads.index')->with('success','スレッドを作成しました');
     }

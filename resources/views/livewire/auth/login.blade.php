@@ -54,10 +54,21 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $user = auth()->user();
 
         if($user->role === Role::Admin){
+            // admin（管理者）はadmin専用ダッシュボードへ
             $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
-        } else{
+        } elseif($user->role === Role::Member){
+            // memberはメンバー用管理画面へ
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        } elseif($user->role === Role::Viewer){
+            // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+            $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
         }
+
+        // if($user->role === Role::Admin){
+        //     $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        // } else{
+        //     $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        // }
         // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 

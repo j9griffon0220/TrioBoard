@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'is_member' => \App\Http\middleware\IsMember::class,
         ]);
     })
+    // ->withProviders([
+    // App\Providers\FortifyServiceProvider::class, // ←★ これを追加
+    // ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

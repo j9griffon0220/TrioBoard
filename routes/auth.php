@@ -8,8 +8,10 @@ Route::middleware('guest')->group(function () {
     Volt::route('login', 'auth.login')
         ->name('login');
 
-    Volt::route('register', 'auth.register')
-        ->name('register');
+    // デフォルト「アカウントをお持ちでない方 サインアップ」をコメントアウト
+    // 新規登録不可の画面に変更
+    // Volt::route('register', 'auth.register')
+    //     ->name('register');
 
     Volt::route('forgot-password', 'auth.forgot-password')
         ->name('password.request');

@@ -7,7 +7,9 @@
 <livewire:post-list :thread="$thread" />
 
 {{-- 投稿用のlivewireコンポーネント --}}
+@can('create',\App\Models\Post::class)
 <livewire:post-form :thread="$thread" />
+@endcan
 
 {{-- スレッド一覧に戻るボタン --}}
 <button>

@@ -9,35 +9,46 @@ use App\Enums\Role;
 // });
 
 // 自作のThreadページのテスト
+
 // pestの ->with() を使ったデータ駆動テスト
-it('ユーザーroleごとのアクセス制御', function(){
-    // ユーザー作成〜ログイン処理
-    $response = $this->actingAs(User::factory()->create['role'=>$role])
-    ->get('/threads');
-    $response->
+// スレッド一覧（'/threads'）についてのテスト
+it('admin、member、viewerはスレッド一覧ページにアクセス可能', function($role, $expected){
+    $user = User::factory()->create(['role' => $role]);
+    $response = $this->actingAs($user)->get('/threads');
+    $response->assertStatus($expected);
+})->with([
+    [Role::Admin, 200],
+    [Role::Member, 200],
+    [Role::Viewer, 200],
+]);
+
+it('非登録者はスレッド一覧ページにアクセスできない', function(){
+    $this->get('/threads')
+    ->assertRedirect('/login');
 });
 
-// it('adminはスレッド新規作成ページにアクセス可能', function(){
-//     $admin = $this->createAdmin();
-//     $response = $this->actingAs($admin)
-//     ->get('');
-// });
 
-// it('adminはスレッド新規作成ページにアクセス可能', function(){
-//     // admin（自分）を固定で作る
-//     $admin = User::factory()->create([
-//     'name' => 'j9griffon',
-//     'email' => 'j9griffon0220@gmail.com',
-//     'role' => Role::Admin, //Enumをそのまま代入なので''不要
-//     'two_factor_secret' => null,
-//     'two_factor_recovery_codes' => null,
-//     ]);
-//     $response = $this->actingAs($admin)
-//     ->get('/threads/create');
-//     $response->assertStatus(200);
-// });
+// スレッド新規作成ページについてのテスト
+it('admin、memberは新規スレッド作成ページにアクセス可能', function($role, $expected){
+    $user = User::factory()->create(['role' => $role]);
+    $response = $this->actingAs($user)->get('/threads/create');
+    $response->assertStatus($expected);
+})->with([
+    [Role::Admin, 200],
+    [Role::Member, 200],
+]);
 
-it('未ログインの方はスレッド新規作成ページにアクセスできない', function(){
+it('viewerは新規スレッド作成ページにアクセスできない', function($role, $expected){
+    $user = User::factory()->create(['role' => $role]);
+    $response = $this->actingAs($user)->get('/threads/create');
+    $response->assertStatus($expected);
+    // 403 Forbidden（アクセス禁止）
+})->with([
+    [Role::Viewer, 403]
+]);
+
+
+it('非登録者はスレッド新規作成ページにアクセスできない', function(){
     $response = $this->get('threads/create');
     $response->assertRedirect('/login');
 });

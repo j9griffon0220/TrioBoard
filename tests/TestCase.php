@@ -17,7 +17,7 @@ use App\Enums\Role;
 abstract class TestCase extends BaseTestCase
 {
     // テスト用にAdminを共通化
-    protected function createAdmin()
+    protected function createRoleAdmin()
     {
         return User::factory()->create([
             'role' => Role::Admin,
@@ -25,16 +25,32 @@ abstract class TestCase extends BaseTestCase
     }
 
     // Memberはデフォルトだがテスト用に明示
-    protected function createMember(){
+    protected function createRoleMember()
+    {
         return User::factory()->create([
             'role' => Role::Member,
         ]);
     }
 
     // Viewer（閲覧のみの方）
-    protected function createViewer(){
+    protected function createRoleViewer()
+    {
         return User::factory()->create([
             'role' => Role::Viewer,
         ]);
+    }
+
+    // 未ログインユーザー（その他の人）は作らない！
+    // User::factory()->create([...]) を呼ぶと 必ずユーザーがDBに作成される
+    // → つまり「存在するユーザー」になってしまう
+
+
+    // 共通アサーション
+
+    // 403 Forbidden（アクセスできない）の結果をまとめる
+    protected function assertForbidden($user, string $uri)
+    {
+        $response = $this->actingAs($user)->get($uri);
+        $response->assertStatus(403);
     }
 }

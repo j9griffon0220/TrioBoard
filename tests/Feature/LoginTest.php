@@ -9,39 +9,55 @@ use App\Enums\Role;
 // });
 
 // 自作のDadhboradのログインテスト
+
 // laravelでは actingAs を使うと簡単にログイン状態のテストができる
-it('adminのみ管理画面にログイン可能', function () {
-    // モデルファクトリーでユーザーを作成
-    // admin（自分）を固定で作る
-    $user = User::factory()->create([
-        'name' => 'j9griffon',
-        'email' => 'j9griffon0220@gmail.com',
-        'role' => Role::Admin, //Enumをそのまま代入なので''不要
-        'two_factor_secret' => null,
-        'two_factor_recovery_codes' => null,
-    ]);
+// actingAs($user) を使うと「ログイン済みユーザー」になる
+
+// adminダッシュボード('/admin/dashboard')についてのテスト
+it('adminのみadminダッシュボードにログイン可能', function(){
+    // 共通メソッドで admin（自分）作成
+    $admin = $this->createRoleAdmin();
     // ログイン状態にする
-    $response = $this->actingAs($user)
+    $response = $this->actingAs($admin)
     ->get('/admin/dashboard');
     $response->assertStatus(200);
 });
 
+it('member、viewerはadminダッシュボードにログイン不可', function($role, $expected){
+    $user = User::factory()->create(['role' => $role]);
+    $response = $this->actingAs($user)->get('/admin/dashboard');
+    $response->assertStatus($expected);
+})->with([
+    // 403 Forbidden（アクセス禁止）
+    [Role::Member, 403],
+    [Role::Viewer, 403],
+]);
 
-it('memberのみmypage（管理画面）にログイン可能', function () {
-    $member = User::factory()->create([
-        'name' => 'member01',
-        'email' => 'member01@gmail.com',
-        'role' => Role::Member,
-        'two_factor_secret' => null,
-        'two_factor_recovery_codes' => null,
-    ]);
+it('非登録者はadminダッシュボードにアクセスできない', function(){
+    $this->get('/admin/dashboard')
+    ->assertRedirect('/login');
+});
+
+
+// memberのmypage・管理画面、('/member/mypage')のテスト
+it('memberのみmypage（管理画面）にログイン可能', function(){
+    $member = $this->createRoleMember();
     $response = $this->actingAs($member)
     ->get('/member/mypage');
     $response->assertStatus(200);
 });
 
+it('adminとviewerはmemberのmypage（管理画面）にログイン不可', function($role, $expected){
+    $user = User::factory()->create(['role' => $role]);
+    $response = $this->actingAs($user)->get('/member/mypage');
+    $response->assertStatus($expected);
+})->with([
+    [Role::Admin, 403],
+    [Role::Viewer, 403],
+]);
 
-it('未ログインの方はmypage（管理画面）にアクセスできない', function () {
+
+it('非登録者はmypage（管理画面）にアクセスできない', function(){
     $response = $this->get('/member/mypage');
     $response->assertRedirect('/login');
 });

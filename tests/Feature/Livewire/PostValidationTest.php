@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Thread;
 use App\Livewire\PostForm;
 use Livewire\Livewire;
+use App\Enums\Role;
 
 // it('renders successfully', function () {
 //     Livewire::test(PostForm::class)
@@ -25,19 +26,17 @@ dataset('posts_body_error', [
     '本文文字数エラー' => ['body', str_repeat('a',401)], // max:400
 ]);
 
-dataset('pass_posts',[
-    'タイトルが必須項目・型・文字数パス' => ['title', 'ポストのテストタイトルです'],
-    '本文が必須項目・型・文字数パス' => ['body', 'ポストのテスト本文です'],
-]);
-
 
 // バリデーションエラーのテスト
 // dataset の配列の並び順と、テスト関数の引数の並び順は必ず一致させる必要がある
 it('post新規投稿のタイトルバリデーションエラー :dataset', function($field, $input){
-    $user = User::factory()->create();
+    // PostFormはPolicyで権限チェックしているのでrole必須
+    $user = User::factory()->create(['role' => Role::Admin]);
+    // PostはThreadに紐づくので必ず作る
+    $thread = Thread::factory()->create();
 
     Livewire::actingAs($user)
-    ->test(PostForm::class)
+    ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
     ->set('body', 'ポストのテスト本文です') //パスする値
     ->set($field, $input) // datasetのNG値
     ->call('store') //store() メソッドを直接呼び出す
@@ -46,10 +45,13 @@ it('post新規投稿のタイトルバリデーションエラー :dataset', fun
 
 
 it('post新規投稿の本文バリデーションエラー :dataset', function($field, $input){
-    $user = User::factory()->create();
+    // PostFormはPolicyで権限チェックしているのでrole必須
+    $user = User::factory()->create(['role' => Role::Member]);
+    // PostはThreadに紐づくので必ず作る
+    $thread = Thread::factory()->create();
 
     Livewire::actingAs($user)
-    ->test(PostForm::class)
+    ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
     ->set('title', 'ポストのテストタイトルです') //パスする値
     ->set($field, $input) // datasetのNG値
     ->call('store') //store() メソッドを直接呼び出す
@@ -58,10 +60,13 @@ it('post新規投稿の本文バリデーションエラー :dataset', function(
 
 
 it('post新規投稿のバリデーションエラー時にDBに保存されない : dataset', function($field, $input){
-    $user = User::factory()->create();
+    // PostFormはPolicyで権限チェックしているのでrole必須
+    $user = User::factory()->create(['role' => Role::Admin]);
+    // PostはThreadに紐づくので必ず作る
+    $thread = Thread::factory()->create();
 
     Livewire::actingAs($user)
-    ->test(PostForm::class)
+    ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
     ->set('body', 'ポストのテスト本文です') //パスする値
     ->set($field, $input)
     ->call('store')
@@ -74,17 +79,22 @@ it('post新規投稿のバリデーションエラー時にDBに保存されな�
 })->with('posts_title_error');
 
 
-// バリデーションが通る場合のテスト
-it('新規投稿のバリデーションパス :dataset', function($field, $passinput){
-    $user = User::factory()->create();
+// バリデーションが通る場合のテスト・datasetは使わない
+it('新規投稿のバリデーションがパスする', function(){
+    // PostFormはPolicyで権限チェックしているのでrole必須
+    $user = User::factory()->create(['role' => Role::Member]);
+    // PostはThreadに紐づくので必ず作る
+    $thread = Thread::factory()->create();
 
     Livewire::actingAs($user)
-    ->test(PostForm::class)
-    ->set($field, $passinput)
+    ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
+    // ->set() は基本的に 「プロパティ名」「値」 の2引数で使う
+    ->set('title', 'これはテストタイトルです')
+    ->set('body', 'これはテスト本文です')
     ->call('store')
     // バリデーションエラーがない
     // Livewire のアサーションは Livewire::test() のチェーン で使う
-    ->assertHasNoErrors($field);
-})->with('pass_posts');
+    ->assertHasNoErrors();
+});
 
 // バリデーションが通る場合の保存は別途投稿テストで行う

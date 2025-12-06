@@ -53,7 +53,7 @@ class ThreadController extends Controller
 
         $thread = Thread::create([
             'title' => $validated['title'],
-            'user_id' => auth()->id(),
+            'user_id' => auth()->id(), //自動的にログインユーザーのIDが保存される
         ]);
         return redirect()->route('threads.index')->with('success','スレッドを作成しました');
     }

@@ -1,7 +1,7 @@
 @extends('layouts.board_base')
 @section('board_content')
 
-<h1>スレッド一覧</h1>
+<h1 class="text-3xl font-bold underline">スレッド一覧</h1>
 @can('create',\App\Models\Thread::class)
 <a href="{{ route('threads.create') }}">スレッド新規作成</a>
 @endcan

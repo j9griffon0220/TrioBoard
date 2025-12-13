@@ -1,6 +1,7 @@
 <?php
 use App\Models\User;
 use App\Models\Thread;
+use App\Enums\Role;
 
 // test('example', function () {
 //     $response = $this->get('/');
@@ -28,7 +29,7 @@ dataset('pass_titles',[
 // 新規ThreadをDBに保存できるかのテスト（バリデーションは別ファイル）
 it('スレッドの新規投稿がDBに保存される :dataset', function($input, $passKey){
     // ユーザーを作る
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Admin]);
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => $input,
     ]);
@@ -42,7 +43,7 @@ it('スレッドの新規投稿がDBに保存される :dataset', function($inpu
 
 
 it('スレッドの新規投稿がエラー入力でDBに保存されない :dataset', function($input, $errorKey){
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Member]);
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => $input,
     ]);
@@ -55,7 +56,7 @@ it('スレッドの新規投稿がエラー入力でDBに保存されない :dat
 
 // 自動で入る値や必須値のテスト（'user_id'、自動で入るcreated_atとupdated_at）
 it('スレッド保存時にuser_idが自動設定・保存される', function(){
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Admin]);
     // actingAs($user)を使うとstore()で$request->user()->idが自動的に入る
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => 'これはスレッドのテストタイトルです',
@@ -69,7 +70,7 @@ it('スレッド保存時にuser_idが自動設定・保存される', function(
 });
 
 it('スレッド保存時にtimestampsで自動設定される', function(){
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Member]);
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => 'これはスレッドのテストタイトルです',
     ]);

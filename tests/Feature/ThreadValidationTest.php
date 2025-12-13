@@ -1,5 +1,6 @@
 <?php
 use App\Models\User;
+use App\Enums\Role;
 
 // test('example', function () {
 //     $response = $this->get('/');
@@ -22,7 +23,7 @@ dataset('pass_titles',[
 
 // バリデーションエラーのテスト
 it('スレッドのタイトルのバリデーションエラー :dataset', function($input, $errorKey){
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Admin]);
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => $input,
     ]);
@@ -31,7 +32,7 @@ it('スレッドのタイトルのバリデーションエラー :dataset', func
 
 
 it('スレッドタイトルのバリデーションエラー時にDBに保存されない :dataset', function($input, $errorKey){
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Member]);
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => $input,
     ]);
@@ -44,7 +45,7 @@ it('スレッドタイトルのバリデーションエラー時にDBに保存�
 
 // バリデーションが通る場合のテスト
 it('スレッドのタイトルがバリデーションを通る :dataset', function($input, $passKey){
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => Role::Member]);
     $response = $this->actingAs($user)->post(route('threads.store'),[
         'title' => $input,
     ]);

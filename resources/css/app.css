@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@300;400&family=Murecho:wght@400;500&display=swap');
+/* Google Fontsをまず冒頭で読み込む・M PLUS 1pの300と400、Murechoの400と500*/
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
@@ -6,9 +8,66 @@
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 
+/* ダークモード用ユーティリティ（dark:xxx）を動かす定義 */
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
+/* debug-outline - 作業確認用アウトラインのカスタムクラス */
+@layer utilities{
+    .debug-outline *{
+    outline: 1px solid #bfe6ff;
+    }
+}
+
+/* Trio Board用カスタム設定 */
+@theme{
+    --color-board-black: #333333; /* 本文用カラー */
+    --color-board-charcoal: #666666; /* 本文サブカラー */
+    --color-board-grey: #F5F5F5; /* 背景色候補１ */
+    --color-board-white: #fdfcfb; /* 背景色候補2 */
+    --color-board-lightgrey: #f3f4f6; /* 背景色候補3 */
+    --color-board-blue: #04CAE7;
+    --color-board-magenta: #FF4A9C;
+    --color-board-yellow: #FFE600;
+    --color-double-blue: #043b8d;
+    --color-double-green: #04b600;
+    --color-double-red: #ff4a00;
+    --font-body: "M PLUS 1p", sans-serif; /* 本文書体 */
+    --font-title: "Murecho", sans-serif; /* タイトル・小見出しなど */
+}
+
+/* フォントサイズ */
+
+
+/* モジュラースケール・スケール比1.2固定 × clamp() × vw すべて +0.25vwで伸び一定 */
+:root{
+    --ratio: 1.2;
+    --s-7: clamp(0.279rem, 0.279rem + 0.25vw, 0.335rem);
+    --s-6: clamp(0.335rem, 0.335rem + 0.25vw, 0.402rem);
+    --s-5: clamp(0.402rem, 0.402rem + 0.25vw, 0.482rem);
+    --s-4: clamp(0.482rem, 0.482rem + 0.25vw, 0.579rem);
+    --s-3: clamp(0.579rem, 0.579rem + 0.25vw, 0.694rem);
+    --s-2: clamp(0.694rem, 0.694rem + 0.25vw, 0.833rem);
+    --s-1: clamp(0.833rem, 0.833rem + 0.25vw, 1rem);
+    --s0: 1rem; /* 基準値 */
+    --s1: clamp(1.2rem, 1.2rem + 0.25vw, 1.44rem);
+    --s2: clamp(1.44rem, 1.44rem + 0.25vw, 1.728rem);
+    --s3: clamp(1.728rem, 1.728rem + 0.25vw, 2.0736rem);
+    --s4: clamp(2.0736rem, 2.0736rem + 0.25vw, 2.488rem);
+    --s5: clamp(2.488rem, 2.488rem + 0.25vw, 2.985rem);
+    --s6: clamp(2.985rem, 2.985rem + 0.25vw, 3.582rem);
+    --s7: clamp(3.582rem, 3.582rem + 0.25vw, 4.298rem);
+
+    --lh-ratio: 1.65; /* 本文基準のline-height */
+    --lh-body: var(--lh-ratio); /* 本文の行間 */
+    --lh-h1: 1.2; /* 見出し：小さくするほど読みやすい by GPT */
+    --lh-h2: 1.25;
+    --lh-h3: 1.3;
+    --lh-h4: 1.35;
+    --measure: 50ch; /* 日本語は 50–60文字が最も読みやすい by GPT */
+}
+
+/* デフォルトの @themeは変更カスタム */
+/* @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --color-zinc-50: #fafafa;
@@ -26,7 +85,7 @@
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
     --color-accent-foreground: var(--color-white);
-}
+} */
 
 @layer theme {
     .dark {
@@ -36,7 +95,8 @@
     }
 }
 
-@layer base {
+/* 全体のボーダーカラー初期値 を変えているだけ */
+/* @layer base {
 
     *,
     ::after,
@@ -45,8 +105,9 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
-}
+} */
 
+/* Breeze/Jetstream が内部で使っている UI コンポーネント用のスタイル */
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }
@@ -55,6 +116,7 @@
     @apply  !mb-0 !leading-tight;
 }
 
+/* Form UI 用の強制スタイル */
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {

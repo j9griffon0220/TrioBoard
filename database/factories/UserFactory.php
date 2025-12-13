@@ -30,8 +30,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            // 'role' => 'member', // Enum型ではないのでroleを追加にならない！
-            'role' => Role::Member,
+            // デフォルトは空にしておき、テスト側で指定
+            // 役割のようなロジックに関係ある部分はテスト側で制御する
+            'role' => null,
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),

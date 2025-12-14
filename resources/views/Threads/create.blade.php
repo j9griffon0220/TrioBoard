@@ -1,20 +1,19 @@
 @extends('layouts.board_base')
 @section('board_content')
-<h1>新規スレッド作成</h1>
+  <h1>新規スレッド作成</h1>
 
-<form action="{{ route('threads.store') }}" method="POST">
+  <form action="{{ route('threads.store') }}" method="POST">
     @csrf
     <label for="">スレッドタイトル：</label>
     <input type="text" name="title" />
     <button type="submit">スレッド作成</button>
-</form>
-@error('title')
-<div>{{ $message }}</div>
-@enderror
+  </form>
+  @error('title')
+    <div>{{ $message }}</div>
+  @enderror
 
-{{-- スレッド一覧に戻るボタン --}}
-<button>
+  {{-- スレッド一覧に戻るボタン --}}
+  <button>
     <a href="{{ route('threads.index') }}">スレッド一覧に戻る</a>
-</button>
-
+  </button>
 @endsection

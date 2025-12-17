@@ -22,21 +22,75 @@
 @theme{
     --color-board-black: #333333; /* 本文用カラー */
     --color-board-charcoal: #666666; /* 本文サブカラー */
-    --color-board-grey: #F5F5F5; /* 背景色候補１ */
+    --color-board-grey: #f5f5f5; /* 背景色候補１ */
     --color-board-white: #fdfcfb; /* 背景色候補2 */
     --color-board-lightgrey: #f3f4f6; /* 背景色候補3 */
-    --color-board-blue: #04CAE7;
-    --color-board-magenta: #FF4A9C;
-    --color-board-yellow: #FFE600;
+    --color-board-blue: #04cae7;
+    --color-board-magenta: #ff4a9c;
+    --color-board-yellow: #ffe600;
     --color-double-blue: #043b8d;
     --color-double-green: #04b600;
     --color-double-red: #ff4a00;
+    --color-board-border: #d1d5db /*threadカード型レイアウト・ボーター用*/
     --font-body: "M PLUS 1p", sans-serif; /* 本文書体 */
     --font-title: "Murecho", sans-serif; /* タイトル・小見出しなど */
+
+
+    /* フォントサイズ・ tailwind公式font-sizeベースにvw = 0.15で可変 */
+
+    /* xs */
+    --text-xs: calc(0.75rem + 0.15vw);
+    --text-xs--line-height: 1.33; /* ≒ calc(1 / 0.75) */
+
+    /* sm */
+    --text-sm: calc(0.875rem + 0.15vw);
+    --text-sm--line-height: 1.43; /* ≒ calc(1.25 / 0.875) */
+
+    /* base 本文pタグサイズ */
+    --text-base: calc(1rem + 0.15vw);
+    --text-base--line-height: 1.5;
+
+    /* lg */
+    --text-lg: calc(1.125rem + 0.15vw);
+    --text-lg--line-height: 1.55; /* ≒ calc(1.75 / 1.125) */
+
+    /* xl */
+    --text-xl: calc(1.25rem + 0.15vw);
+    --text-xl--line-height: 1.4;
+
+    /* 2xl */
+    --text-2xl: calc(1.5rem + 0.15vw);
+    --text-2xl--line-height: 1.35;
+
+    /* 3xl */
+    --text-3xl: calc(1.875rem + 0.15vw);
+    --text-3xl--line-height: 1.25;
+
+    /* 4xl */
+    --text-4xl: calc(2.25rem + 0.15vw);
+    --text-4xl--line-height: 1.2;
+
+    /* 5xl */
+    --text-5xl: calc(3rem + 0.15vw);
+    --text-5xl--line-height: 1.1;
+
+    /* 6xl */
+    --text-6xl: calc(3.75rem + 0.15vw);
+    --text-6xl--line-height: 1.05;
+
+    /* 7xl */
+    --text-7xl: calc(4.5rem + 0.15vw);
+    --text-7xl--line-height: 1.02;
+
+    /* 8xl */
+    --text-8xl: calc(6rem + 0.15vw);
+    --text-8xl--line-height: 1;
+
+    /* 9xl */
+    --text-9xl: calc(8rem + 0.15vw);
+    --text-9xl--line-height: 1;
+
 }
-
-/* フォントサイズ */
-
 
 /* モジュラースケール・スケール比1.2固定 × clamp() × vw すべて +0.25vwで伸び一定 */
 :root{
@@ -56,13 +110,6 @@
     --s5: clamp(2.488rem, 2.488rem + 0.25vw, 2.985rem);
     --s6: clamp(2.985rem, 2.985rem + 0.25vw, 3.582rem);
     --s7: clamp(3.582rem, 3.582rem + 0.25vw, 4.298rem);
-
-    --lh-ratio: 1.65; /* 本文基準のline-height */
-    --lh-body: var(--lh-ratio); /* 本文の行間 */
-    --lh-h1: 1.2; /* 見出し：小さくするほど読みやすい by GPT */
-    --lh-h2: 1.25;
-    --lh-h3: 1.3;
-    --lh-h4: 1.35;
     --measure: 50ch; /* 日本語は 50–60文字が最も読みやすい by GPT */
 }
 

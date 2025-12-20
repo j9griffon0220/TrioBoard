@@ -93,6 +93,7 @@
 }
 
 /* モジュラースケール・スケール比1.2固定 × clamp() × vw すべて +0.25vwで伸び一定 */
+/* 上下の間隔はmb（マージンボトム）で基本、調整する方針 26.12 */
 :root{
     --ratio: 1.2;
     --s-7: clamp(0.279rem, 0.279rem + 0.25vw, 0.335rem);
@@ -112,6 +113,37 @@
     --s7: clamp(3.582rem, 3.582rem + 0.25vw, 4.298rem);
     --measure: 50ch; /* 日本語は 50–60文字が最も読みやすい by GPT */
 }
+
+/* ボタン用のユーティリティ */
+/* btnはボタンのベースとなる共通設定 */
+@utility btn {
+    @apply border-2 rounded-xl border-double-blue
+}
+
+/* btn-primaryは作成系のボタン */
+@utility btn-primary{
+    @apply p-(--s-5) text-stone-50 bg-double-blue shadow-[0_0.4em_0_var(--color-board-blue)]
+    hover:text-stone-50 hover:bg-double-blue/60 hover:shadow-[0_0.2em_0_var(--color-board-blue)] transition-colors duration-500 ease-in-out
+    active:translate-y-[0.4em] active:shadow-none
+}
+
+/* btn-secondary は戻る系のボタン */
+@utility btn-secondary{
+    @apply p-(--s-5) text-double-blue bg-stone-50 shadow-[0_0.4em_0_var(--color-board-blue)]
+    hover:text-double-blue hover:bg-double-blue/20 hover:shadow-[0_0.2em_0_var(--color-board-blue)] transition-colors duration-500 ease-in-out
+    active:translate-y-[0.4em] active:shadow-none
+}
+
+/* png画像を使っているlogin,logoutボタン用 */
+@utility btn-outline {
+    @apply p-(--s-2) shadow-[0_0.4em_0_var(--color-board-blue)]
+    hover:bg-double-blue/20 hover:shadow-[0_0.2em_0_var(--color-board-blue)] transition-colors duration-500 ease-in-out
+    active:translate-y-[0.4em] active:shadow-none
+}
+
+/* postの投稿用、名前アイコン代わりの装飾 */
+@utility name-label {}
+
 
 /* デフォルトの @themeは変更カスタム */
 /* @theme {

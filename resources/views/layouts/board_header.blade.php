@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-[60vw] pt-[var(--s3)]">
+<div class="mx-auto max-w-[60vw] mb-[var(--s4)]">
   <picture>
     <source
       srcset="

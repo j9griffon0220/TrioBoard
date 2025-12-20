@@ -24,7 +24,7 @@ class PostList extends Component
 
     public function render()
     {
-        $this->posts = $this->thread->posts()->latest()->get();
+        $this->posts = $this->thread->posts()->oldest()->get();
         // デバッグ
         // dd($posts);
         // dd($this->selectedthread->posts()->count());
@@ -36,7 +36,7 @@ class PostList extends Component
     {
         // whereで条件指定、thread_idが今のスレッドIDと一致する投稿だけを絞り込む
         $this->posts = post::where('thread_id', $this->thread->id)
-        ->latest() // 投稿日時の新しい順に並べる
+        ->oldest() // 投稿日時の古い順に並べる
         ->get();   // 実行して投稿一覧を取得する
     }
 

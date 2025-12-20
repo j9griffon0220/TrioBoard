@@ -12,13 +12,13 @@
   <body @class(['debug-outline' => app()->environment('local')])>
     <div class="flex min-h-screen items-center justify-center bg-board-grey">
       <div class="max-w-[90vw]">
-        <div class="mx-auto max-w-[70vw]">
+        <h1 class="mx-auto max-w-[60ch] mb-[var(--s6)]">
           <picture>
             <source
               srcset="
                 {{ asset('images/trio-board-logo@1x.webp') }} 1x,
                 {{ asset('images/trio-board-logo@2x.webp') }} 2x
-              "
+                "
               type="image/webp"
             />
             {{-- フォールバック --}}
@@ -28,30 +28,28 @@
               class="h-auto w-full"
             />
           </picture>
-        </div>
-        <h1 class="mt-[var(--s4)] text-center font-body text-board-black">
+        </h1>
+
+        <p class="mb-[var(--s5)] text-center font-body text-board-black font-normal text-base">
           アクセス制限のあるメンバー専用掲示板です。ログインしてお入りください。
           <br />
           ご利用ありがとうございます。
-        </h1>
-        <div class="mx-auto mt-[var(--s4)] max-w-[25vw]">
+        </p>
+
+        <div class="mx-auto mb-[var(--s4)] flex justify-center ">
           <a
             href="{{ route('login') }}"
-            class="block rounded-2xl border-2 border-board-magenta p-[var(--s-1)] shadow-md"
+            class="inline-flex items-center max-w-[15ch] btn btn-outline"
           >
-            <picture>
-              <source
-                srcset="
-                  {{ asset('images/board-login@1x.webp') }} 1x,
-                  {{ asset('images/board-login@2x.webp') }} 2x
-                "
-                type="image/webp"
-              />
-              {{-- フォールバック --}}
-              <img src="{{ asset('images/board-login.png') }}" alt="Login" class="h-auto w-full" />
-            </picture>
+          <img src="image.png"
+          srcset="{{ asset('images/board-login@1x.png') }} 1x,
+          {{ asset('images/board-login@2x.png')}} 2x" alt="Login" class="h-auto w-full">
           </a>
         </div>
+
+        {{-- フッター --}}
+        @include('layouts.board_footer')
+
       </div>
     </div>
   </body>

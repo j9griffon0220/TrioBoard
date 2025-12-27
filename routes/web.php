@@ -11,6 +11,7 @@ use App\Http\Controllers\ThreadController;
 use App\Livewire\PostList;
 use App\Livewire\PostForm;
 use App\Enums\Role;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('index');
@@ -65,3 +66,10 @@ Route::middleware(['auth'])->group(function(){
 });
 
 // livewireはコンポーネントとして部品扱いするので、ルーティングで直接読み込まない
+
+// 404ページの「戻る」ボタン調整用・@authではNGのため
+Route::fallback(function(){
+    return view('errors.404', [
+        'isLoggedIn' => Auth::check(),
+    ]);
+});

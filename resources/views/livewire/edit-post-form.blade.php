@@ -1,4 +1,5 @@
 {{-- 投稿されたpostを編集するためのコンポーネント --}}
+{{-- 実装はまだ 25.12 --}}
 <div>
   {{-- If your happiness depends on money, you will never be happy with yourself. --}}
   @if (auth()->id() === $post->user_id)

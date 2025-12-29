@@ -12,11 +12,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* debug-outline - 作業確認用アウトラインのカスタムクラス */
-@layer utilities{
+/* @layer utilities{
     .debug-outline *{
     outline: 1px solid #bfe6ff;
     }
-}
+} */
 
 /* Trio Board用カスタム設定 */
 @theme{
@@ -25,12 +25,11 @@
     --color-board-grey: #f5f5f5; /* 背景色候補１ */
     --color-board-white: #fdfcfb; /* 背景色候補2 */
     --color-board-lightgrey: #f3f4f6; /* 背景色候補3 */
-    --color-board-blue: #04cae7;
-    --color-board-magenta: #ff4a9c;
-    --color-board-yellow: #ffe600;
-    --color-double-blue: #043b8d;
-    --color-double-green: #04b600;
-    --color-double-red: #ff4a00;
+    --color-board-blue: #7ec5c9;
+    --color-board-magenta: #e9a4a1;
+    --color-board-yellow: #f4b138;
+    --color-double-blue: #83acb6;
+    --color-double-red: #e35d3e;
     --color-board-border: #d1d5db /*threadカード型レイアウト・ボーター用*/
     --font-body: "M PLUS 1p", sans-serif; /* 本文書体 */
     --font-title: "Murecho", sans-serif; /* タイトル・小見出しなど */
@@ -122,27 +121,50 @@
 
 /* btn-primaryは作成系のボタン */
 @utility btn-primary{
-    @apply p-(--s-5) text-stone-50 bg-double-blue shadow-[0_0.4em_0_var(--color-board-blue)]
+    @apply p-(--s-5) text-stone-50 bg-double-blue shadow-[0_0.3em_0_var(--color-board-blue)]
     hover:text-stone-50 hover:bg-double-blue/60 hover:shadow-[0_0.2em_0_var(--color-board-blue)] transition-colors duration-500 ease-in-out
-    active:translate-y-[0.4em] active:shadow-none
+    active:translate-y-[0.3em] active:shadow-none
 }
 
 /* btn-secondary は戻る系のボタン */
 @utility btn-secondary{
-    @apply p-(--s-5) text-double-blue bg-stone-50 shadow-[0_0.4em_0_var(--color-board-blue)]
+    @apply p-(--s-5) text-double-blue bg-stone-50 shadow-[0_0.3em_0_var(--color-board-blue)]
     hover:text-double-blue hover:bg-double-blue/20 hover:shadow-[0_0.2em_0_var(--color-board-blue)] transition-colors duration-500 ease-in-out
-    active:translate-y-[0.4em] active:shadow-none
+    active:translate-y-[0.3em] active:shadow-none
 }
 
 /* png画像を使っているlogin,logoutボタン用 */
 @utility btn-outline {
-    @apply p-(--s-2) shadow-[0_0.4em_0_var(--color-board-blue)]
+    @apply p-(--s-2) shadow-[0_0.3em_0_var(--color-board-blue)]
     hover:bg-double-blue/20 hover:shadow-[0_0.2em_0_var(--color-board-blue)] transition-colors duration-500 ease-in-out
-    active:translate-y-[0.4em] active:shadow-none
+    active:translate-y-[0.3em] active:shadow-none
 }
 
 /* postの投稿用、名前アイコン代わりの装飾 */
-@utility name-label {}
+/* @layer componentsは通常のcssなので ;（セミコロン） が必要 */
+@layer components {
+    .name-label {
+        position: relative;
+        padding-left: 1rem;
+    }
+
+    .name-label::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0.4em;
+        height: 100%;
+        background-color: var(--color-board-blue);
+    }
+}
+/* @component name-label {
+    relative pl-4
+    &::before{
+        content: '';
+        @apply absolute left-0 top-0 h-full w-[1em] bg-board-blue
+    }
+} */
 
 
 /* デフォルトの @themeは変更カスタム */

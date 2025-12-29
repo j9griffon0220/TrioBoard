@@ -13,21 +13,11 @@
     <div class="flex min-h-screen items-center justify-center bg-board-grey">
       <div class="max-w-[90vw]">
         <h1 class="mx-auto max-w-[60ch] mb-[var(--s6)]">
-          <picture>
-            <source
-              srcset="
-                {{ asset('images/trio-board-logo@1x.webp') }} 1x,
-                {{ asset('images/trio-board-logo@2x.webp') }} 2x
-                "
-              type="image/webp"
-            />
-            {{-- フォールバック --}}
             <img
-              src="{{ asset('images/trio-board-logo.png') }}"
+              src="{{ asset('images/trio-board-logo.svg') }}"
               alt="Trio Board Logo"
               class="h-auto w-full"
             />
-          </picture>
         </h1>
 
         <p class="mb-[var(--s5)] text-center font-body text-board-black font-normal text-base">
@@ -41,9 +31,11 @@
             href="{{ route('login') }}"
             class="inline-flex items-center max-w-[15ch] btn btn-outline"
           >
-          <img src="image.png"
-          srcset="{{ asset('images/board-login@1x.png') }} 1x,
-          {{ asset('images/board-login@2x.png')}} 2x" alt="Login" class="h-auto w-full">
+            <img
+              src="{{ asset('images/board-login.svg') }}"
+              alt="login"
+              class="h-auto w-full"
+            />
           </a>
         </div>
 

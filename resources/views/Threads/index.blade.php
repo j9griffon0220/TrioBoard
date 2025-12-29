@@ -18,7 +18,7 @@
 @endif
 
 {{-- スレッド表示 --}}
-<ul class="">
+<ul>
     @forelse ($threads as $thread)
         <li class="text-board-black font-body font-normal text-base border-1 p-[var(--s-3)] border-board-border mb-[var(--s4)] max-w-[80vw] border-l-5 border-l-board-blue
         hover:shadow-xl transition-shadow bg-gray-50">
@@ -39,9 +39,11 @@
         <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit" class="btn btn-outline">
-          <img src="image.png"
-          srcset="{{ asset('images/board-logout@1x.png') }} 1x,
-          {{ asset('images/board-logout@2x.png')}} 2x" alt="Login" class="h-auto w-full">
+            <img
+              src="{{ asset('images/board-logout.svg') }}"
+              alt="logout"
+              class="h-auto w-full"
+            />
         </button>
         </form>
     </div>

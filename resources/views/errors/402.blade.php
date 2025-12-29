@@ -1,3 +1,5 @@
+{{-- 402 Payment Required（支払いが必要） --}}
+{{-- 使わないエラーページはデフォルトのまま --}}
 @extends('errors::minimal')
 
 @section('title', __('Payment Required'))

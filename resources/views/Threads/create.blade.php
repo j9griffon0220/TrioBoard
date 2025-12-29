@@ -5,11 +5,13 @@
   <div class="text-board-black font-body border-1 p-[var(--s-1)] border-board-border mb-[var(--s4)] max-w-[80vw] border-l-5 border-l-board-blue">
     <form action="{{ route('threads.store') }}" method="POST">
     @csrf
-    <label class="block font-body text-board-charcoal font-light text-base mb-[var(--s-4)]">タイトル：</label>
+    <label class="block font-body text-board-charcoal font-light text-base mb-[var(--s-4)]">
+        タイトル：
+    </label>
 
     <input type="text" name="title" value="{{ old('title') }}"
     required placeholder="スレッドのタイトルを入力してください"
-    class="w-full border-2 border-gray-300 p-[var(--s-4)] mb-[var(--s1)] focus:border-board-blue focus:invalid:border-double-red focus:outline-none"
+    class="w-full border-2 border-gray-300 p-[var(--s-4)] mb-[var(--s1)] focus:outline-none focus:border-double-blue "
     />
 
     @error('title')
@@ -20,7 +22,7 @@
 
     <div class="flex justify-end">
         <div class="min-w-[15ch] mb-[var(--s-4)] btn btn-primary text-center">
-            <button type="submit" class="font-title  text-base">スレッド作成</button>
+            <button type="submit" class="font-title text-base">スレッド作成</button>
         </div>
     </div>
     </form>

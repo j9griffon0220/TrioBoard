@@ -29,11 +29,12 @@
         <div class="mx-auto mb-[var(--s4)] flex justify-center ">
           <a
             href="{{ route('login') }}"
+            {{-- wire:navigate="false" --}}
             class="inline-flex items-center max-w-[15ch] btn btn-outline"
           >
             <img
               src="{{ asset('images/board-login.svg') }}"
-              alt="login"
+              alt="loginボタン"
               class="h-auto w-full"
             />
           </a>

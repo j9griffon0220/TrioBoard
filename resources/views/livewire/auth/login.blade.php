@@ -26,8 +26,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
   /**
    * Handle an incoming authentication request.
    */
-  public function login(): void
+
+    public function login(): void
   {
+    // dd('login reached');
+
     $this->validate();
 
     $this->ensureIsNotRateLimited();
@@ -43,9 +46,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
         'login.remember' => $this->remember,
       ]);
 
-      $this->redirect(route('two-factor.login'), navigate: true);
+    $this->redirect(route('two-factor.login'), navigate: true);
+    return;
 
-      return;
     }
 
     Auth::login($user, $this->remember);
@@ -53,27 +56,90 @@ new #[Layout('components.layouts.auth')] class extends Component {
     RateLimiter::clear($this->throttleKey());
     Session::regenerate();
 
-    // ロールに応じてリダイレクト先を変更
-    $user = auth()->user();
-
-    if ($user->role === Role::Admin) {
-      // admin（管理者）はadmin専用ダッシュボードへ
-      $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
-    } elseif ($user->role === Role::Member) {
-      // memberはメンバー用管理画面へ
-      $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    } elseif ($user->role === Role::Viewer) {
-      // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-      $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
-    }
-
-    // if($user->role === Role::Admin){
-    //     $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
-    // } else{
-    //     $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    // }
     // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
   }
+
+    // $user = auth()->user();
+
+    // ロールに応じてリダイレクト先を変更
+//     $this->redirectIntended(
+//     default: match ($user->role) {
+//         Role::Admin  => route('filament.admin.pages.dashboard'),
+//         Role::Member => route('filament.member.pages.dashboard'),
+//         Role::Viewer => route('threads.index'),
+//     }
+// );
+
+
+    // if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
+    // $this->redirect(route('filament.admin.pages.dashboard'));
+    // } elseif ($user->role === Role::Member) {
+    // // memberはメンバー用管理画面へ
+    // $this->redirect(route('filament.member.pages.dashboard'));
+    // } elseif ($user->role === Role::Viewer) {
+    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    // $this->redirect(route('threads.index'));
+    // }
+
+    // if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
+    // $this->redirect(route('filament.admin.pages.dashboard'));
+    // return;
+    // } elseif ($user->role === Role::Member) {
+    // // memberはメンバー用管理画面へ
+    // $this->redirect(route('filament.member.pages.dashboard'));
+    // return;
+    // } elseif ($user->role === Role::Viewer) {
+    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    // $this->redirect(route('threads.index'));
+    // return;
+    // }
+
+    //     if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
+    // $this->redirect(route('filament.admin.pages.dashboard'));
+    // } elseif ($user->role === Role::Member) {
+    // // memberはメンバー用管理画面へ
+    // $this->redirect(route('filament.member.pages.dashboard'));
+    // } elseif ($user->role === Role::Viewer) {
+    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+    // }
+
+    // if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
+    //   return redirect()-> route('filament.admin.pages.dashboard');
+    // } elseif ($user->role === Role::Member) {
+    // // memberはメンバー用管理画面へ
+    //   return redirect()-> route('filament.member.pages.dashboard');
+    // } elseif ($user->role === Role::Viewer) {
+    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+    // }
+
+    // if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ
+    //   return redirect('/admin'); // ← wire:navigate を使わない
+    // } elseif ($user->role === Role::Member) {
+    // // memberはメンバー用管理画面へ
+    //   return redirect('/member');
+    // } elseif ($user->role === Role::Viewer) {
+    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+    // }
+
+    // if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ
+    //   $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+    // } elseif ($user->role === Role::Member) {
+    // // memberはメンバー用管理画面へ
+    //   $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    // } elseif ($user->role === Role::Viewer) {
+    //   viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+    // }
+
 
   /**
    * Validate the user's credentials.

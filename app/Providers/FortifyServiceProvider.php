@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use App\Http\Responses\LoginResponse;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 // use Laravel\Fortify\Contracts\LogoutResponse;
 
 // resources/views/livewire/auth/login.blade.php の方で制御するのでこちらは一旦見合わせ
@@ -21,6 +21,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         // LoginResponseを登録（しないと適応されない）
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
         // $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
         // dd('register called');
     }

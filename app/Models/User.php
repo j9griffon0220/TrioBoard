@@ -10,11 +10,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Enums\Role;
 
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
-
-// class User extends Authenticatable
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
@@ -81,16 +77,5 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Post::class);
     }
 
-    // Filament Multi‑panel のための記述
-    // ユーザーがパネルにアクセスできるかどうか canAccessPanel() で判定
-    public function canAccessPanel(Panel $panel): bool{
-    if($panel->getId() === 'admin'){
-        return $this -> role === Role::Admin;
-    }
-    if($panel->getId() === 'member'){
-        return $this -> role === Role::Member;
-    }
-    return false;
-    }
 }
 

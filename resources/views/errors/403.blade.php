@@ -10,18 +10,26 @@
   </div>
 
   <h1 class="text-double-blue font-title text-center mb-[var(--s6)] font-medium text-xl">
-    403 – アクセス権がありません
+    403 – このページへのアクセス権がありません
   </h1>
   <p class="mb-[var(--s5)] text-center font-body text-board-black font-normal text-base">
-    ログインが必要なページ、またはアクセスが制限されているページの可能性があります。
+    現在のアカウントでは、このページを表示することができません。
     <br />
-    お手数ですが、ログインしてから再度お試しください。
+    お手数ですが、下のボタンからお戻りください。
   </p>
 
-    {{-- ログイン画面に戻るボタン --}}
+  {{-- userのroleによってボタンを出し分ける --}}
+  {{-- ログイン画面に戻るボタン --}}
     <div class="flex justify-center mb-[var(--s4)]">
         <div class="min-w-[15ch] block  text-center btn btn-secondary">
-            <a href="{{ route('login') }}">ログイン画面へ</a>
+            <a href="@if(auth()->user()?->role === \App\Enums\Role::Admin)
+            {{ route('admin.dashboard') }}
+            @elseif(auth()->user()?-> role === \App\Enums\Role::Member)
+            {{ route('member.mypage') }}
+            @else
+            {{ route('threads.index') }}
+            @endif">
+        戻る</a>
         </div>
     </div>
 @endsection

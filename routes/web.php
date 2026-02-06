@@ -21,6 +21,7 @@ Route::get('/', function () {
 // デバッグ
 // dd(app(Laravel\Fortify\Contracts\LoginResponse::class));
 
+// starter kitのdashboardルート
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

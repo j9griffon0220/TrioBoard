@@ -27,6 +27,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
    * Handle an incoming authentication request.
    */
 
+
+    // public function login():
     public function login(): void
   {
     // dd('login reached');
@@ -56,67 +58,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
     RateLimiter::clear($this->throttleKey());
     Session::regenerate();
 
-    // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-  }
+    // return redirect()->intended(route('dashboard'));
 
-    // $user = auth()->user();
+    $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    $user = auth()->user();
 
-    // ロールに応じてリダイレクト先を変更
-//     $this->redirectIntended(
-//     default: match ($user->role) {
-//         Role::Admin  => route('filament.admin.pages.dashboard'),
-//         Role::Member => route('filament.member.pages.dashboard'),
-//         Role::Viewer => route('threads.index'),
-//     }
-// );
-
-
-    // if ($user->role === Role::Admin) {
-    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
-    // $this->redirect(route('filament.admin.pages.dashboard'));
-    // } elseif ($user->role === Role::Member) {
-    // // memberはメンバー用管理画面へ
-    // $this->redirect(route('filament.member.pages.dashboard'));
-    // } elseif ($user->role === Role::Viewer) {
-    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-    // $this->redirect(route('threads.index'));
-    // }
-
-    // if ($user->role === Role::Admin) {
-    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
-    // $this->redirect(route('filament.admin.pages.dashboard'));
-    // return;
-    // } elseif ($user->role === Role::Member) {
-    // // memberはメンバー用管理画面へ
-    // $this->redirect(route('filament.member.pages.dashboard'));
-    // return;
-    // } elseif ($user->role === Role::Viewer) {
-    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-    // $this->redirect(route('threads.index'));
-    // return;
-    // }
-
-    //     if ($user->role === Role::Admin) {
-    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
-    // $this->redirect(route('filament.admin.pages.dashboard'));
-    // } elseif ($user->role === Role::Member) {
-    // // memberはメンバー用管理画面へ
-    // $this->redirect(route('filament.member.pages.dashboard'));
-    // } elseif ($user->role === Role::Viewer) {
-    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
-    // }
-
-    // if ($user->role === Role::Admin) {
-    // // admin（管理者）はadmin専用ダッシュボードへ。'filament.admin.auth.login'のルート名NG
-    //   return redirect()-> route('filament.admin.pages.dashboard');
-    // } elseif ($user->role === Role::Member) {
-    // // memberはメンバー用管理画面へ
-    //   return redirect()-> route('filament.member.pages.dashboard');
-    // } elseif ($user->role === Role::Viewer) {
-    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
-    // }
+    // // ロールに応じてリダイレクト先を変更
 
     // if ($user->role === Role::Admin) {
     // // admin（管理者）はadmin専用ダッシュボードへ
@@ -129,16 +76,17 @@ new #[Layout('components.layouts.auth')] class extends Component {
     //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
     // }
 
-    // if ($user->role === Role::Admin) {
-    // // admin（管理者）はadmin専用ダッシュボードへ
-    //   $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
-    // } elseif ($user->role === Role::Member) {
-    // // memberはメンバー用管理画面へ
-    //   $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    // } elseif ($user->role === Role::Viewer) {
-    //   viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
-    // }
+    if ($user->role === Role::Admin) {
+    // admin（管理者）はadmin専用ダッシュボードへ
+      $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+    } elseif ($user->role === Role::Member) {
+    // memberはメンバー用管理画面へ
+      $this->redirectIntended(default: route('member.mypage', absolute: false), navigate: true);
+    } elseif ($user->role === Role::Viewer) {
+    // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+      $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+    }
+      }
 
 
   /**
@@ -205,6 +153,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
   <x-auth-session-status class="text-center" :status="session('status')" />
 
   <form method="POST" wire:submit="login" class="flex flex-col gap-6">
+    {{-- <form wire:submit="login" class="flex flex-col gap-6"> --}}
     <!-- Email Address -->
     <flux:input
       wire:model="email"

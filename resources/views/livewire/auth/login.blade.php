@@ -76,6 +76,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
     //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
     // }
 
+    // まず例外処理、viewer固有の例外ルールで確認
+    if($usr->role ===.  Role::Viewer&&
+    ! $usr->is_active){
+        abort(403, '申し訳ありません。このアカウントは無効です。');
+    }
+
+    // roleによる分岐
     if ($user->role === Role::Admin) {
     // admin（管理者）はadmin専用ダッシュボードへ
       $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);

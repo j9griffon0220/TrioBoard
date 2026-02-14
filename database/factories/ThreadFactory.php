@@ -17,11 +17,15 @@ class ThreadFactory extends Factory
      */
     public function definition(): array
     {
+        // member不在デバッグ
+        // dd('ThreadFactory called');
+
         return [
             // idとtimestampは自動生成されるので指定しない
             'title' => fake('ja_JP')->sentence(),
+            // user_idは親から渡す
             // user_idを既存のUserモデルと紐付ける
-            'user_id' => User::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
         ];
     }
 }

@@ -19,11 +19,17 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
+        // member不在デバッグ
+        // dd('PostFactory called');
+
         return [
             // idとtimestampは自動生成されるので指定しない
             'title' => fake()->sentence(),
             'body' => fake()->text(),
-            'user_id' => User::factory(),
+            // user_idは親から渡す
+            'user_id' => User::inRandomOrder()->first()->id,
+            // 'user_id' => User::factory(),
+            // 'thread_id' => Thread::factory(),
             'thread_id' => Thread::factory(),
             'is_edited' => fake()->boolean(),
         ];

@@ -77,8 +77,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
     // }
 
     // まず例外処理、viewer固有の例外ルールで確認
-    if($usr->role ===.  Role::Viewer&&
-    ! $usr->is_active){
+    if($user->role ===  Role::Viewer&&
+    ! $user->is_active){
         abort(403, '申し訳ありません。このアカウントは無効です。');
     }
 

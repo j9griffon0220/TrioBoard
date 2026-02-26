@@ -48,18 +48,53 @@ Route::middleware(['auth'])->group(function () {
 require __DIR__.'/auth.php';
 
 // adminの管理画面
-Route::middleware(['auth'])->group(function(){
-    Route::get('/admin/dashboard', Dashboard::class)
-    ->middleware('is_admin')
-    ->name('admin.dashboard');
-});
+// Route::middleware(['auth'])->group(function(){
+//     Route::get('/admin/dashboard', Dashboard::class)
+//     ->middleware('is_admin')
+//     ->name('admin.dashboard');
+// });
+
+// adminのルーティングまとめ
+Route::middleware(['auth', 'is_admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function(){
+        // adminの管理画面
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        // 自分の投稿のみを表示
+        Route::get('/dashboard/posts', [MyPostController::class, 'myPosts'])->name('dashboard.posts');
+    });
+
+
+// memberのルーティングまとめ
+Route::middleware(['auth', 'is_member'])
+    ->prefix('member')
+    ->name('member.')
+    ->group(function(){
+        // memberのmypage（管理画面）
+        Route::get('/member/mypage', Mypage::class)->name('mypage');
+        // 自分の投稿のみを表示
+        Route::get('/member/mypage/posts', [MyPostController::class, 'myPosts'])->name('mypage.posts');
+    });
 
 // memberのmypage（管理画面）
-Route::middleware(['auth'])->group(function(){
-    Route::get('/member/mypage', Mypage::class)
-    ->middleware('is_member')
-    ->name('member.mypage');
-});
+// Route::middleware(['auth'])->group(function(){
+//     Route::get('/member/mypage', Mypage::class)
+//     ->middleware('is_member')
+//     ->name('member.mypage');
+// });
+
+// 自分の投稿のみを表示（admin用）
+// Route::middleware(['auth','role:admin'])->group(function(){
+//     Route::get('/admin/dashboard/posts', [MyPostController::class, 'myPosts'])
+//     ->name('admin.dashboard.posts');
+// });
+
+// 自分の投稿のみを表示（member用）
+// Route::middleware(['auth','role:member'])->group(function(){
+//     Route::get('/member/mypage/posts', [MyPostController::class, 'myPosts'])
+//     ->name('member.mypage.posts');
+// });
 
 // Threadのリソースルート
 Route::middleware(['auth'])->group(function(){

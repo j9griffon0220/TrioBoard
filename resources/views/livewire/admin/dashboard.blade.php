@@ -2,14 +2,25 @@
 <div>
 <h1>管理者ダッシュボード画面</h1>
 
-<a href="{{ route('threads.index')}}"
-class="min-w-[15ch] inline-block text-center btn btn-secondary">
-    スレッド一覧へ
-</a>
+    {{-- 左サイド --}}
+    <aside>
+    <ul>
+        <li>マイポスト表示</li>
+        <li>
+        <a href="{{ route('threads.index')}}"
+        class="min-w-[15ch] inline-block text-center btn btn-secondary">
+            スレッド一覧へ
+        </a>
+        </li>
+    </ul>
+    </aside>
+
+    {{-- 右メインサイド --}}
+
 </div>
 
-{{--
-  <div>
+
+  {{-- <div> --}}
   {{-- The Master doesn't talk, he acts.
 --}}
 {{-- </div> --}}
@@ -20,7 +31,7 @@ class="min-w-[15ch] inline-block text-center btn btn-secondary">
 --}}
 
   {{-- <x-layouts.app :title="__('管理者ダッシュボード画面')">
-  <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+  {{-- <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
   <div class="grid auto-rows-min gap-4 md:grid-cols-3">
   <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
   <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />

@@ -60,7 +60,7 @@ Route::middleware(['auth', 'is_admin'])
     ->name('admin.')
     ->group(function(){
         // adminの管理画面
-        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('/admin/dashboard', Dashboard::class)->name('dashboard');
         // 自分の投稿のみを表示
         Route::get('/dashboard/posts', [MyPostController::class, 'myPosts'])->name('dashboard.posts');
     });

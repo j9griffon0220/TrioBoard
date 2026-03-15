@@ -9,7 +9,6 @@ RUN install-php-extensions \
     intl \
     zip \
     bcmath \
-    gd \
     opcache
 
 # 3. 環境変数の設定 (Koyebのデフォルトポート 80 に合わせる)

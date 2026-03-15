@@ -1,0 +1,53 @@
+# Gitの設定
+.git
+.gitignore
+
+.phpunit.cache
+public/hot
+public/storage
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+auth.json
+.fleet
+.idea
+.nova
+.vscode
+.zed
+
+# ディレクトリとして確実に除外する
+vendor/
+node_modules/
+
+bootstrap/cache/*.php
+.tailwind-cache
+resources/views/livewire/*.volt.php
+
+
+# Laravelのエラー回避のためフォルダ構造は残すが、中身の動的なファイルは除外する
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/logs/*
+
+
+# --- Logs & Debug ---
+npm-debug.log*
+
+
+# --- Docker / Sail ---
+docker-compose.override.yml
+.sail
+vendor/bin/sail
+mysql-data
+redis-data
+
+# --- System ---
+.DS_Store
+Thumbs.db

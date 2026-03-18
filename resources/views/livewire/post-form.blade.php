@@ -1,8 +1,8 @@
 <div>
   {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
-  <h1 class="text-double-blue font-title text-center mb-[var(--s4)] font-medium text-xl">投稿フォーム</h1>
+  <h1 class="text-double-blue font-title text-center mb-[var(--s4)] font-medium text-2xl">投稿フォーム</h1>
 
-    <div class="max-w-[90vw] mb-[var(--s6)] p-[var(--s-2)] bg-board-blue/9">
+    <div class="max-w-[90vw] mb-[var(--s6)] p-[var(--s2)] bg-board-blue/9">
         <form wire:submit.prevent="store">
             <label class="block font-body text-board-charcoal font-light text-base mb-[var(--s-4)]">
                 タイトル：

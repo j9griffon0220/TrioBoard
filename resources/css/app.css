@@ -116,7 +116,7 @@
 /* ボタン用のユーティリティ */
 /* btnはボタンのベースとなる共通設定 */
 @utility btn {
-    @apply border-2 rounded-xl border-double-blue
+    @apply border-2 rounded-xl border-double-blue text-base
 }
 
 /* btn-primaryは作成系のボタン */

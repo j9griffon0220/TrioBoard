@@ -46,6 +46,9 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
+        // 保存する権限があるか確認
+        $this->authorize('create', Thread::class);
+
         //スレッドのバリデーション
         $validated = $request->validate([
             'title' => 'required|string|max:30',

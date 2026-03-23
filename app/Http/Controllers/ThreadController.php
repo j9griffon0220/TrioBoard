@@ -73,6 +73,8 @@ class ThreadController extends Controller
         return view('threads.show', compact('thread'));
     }
 
+    // 26年の初回デプロイでは以下のメソッドは実装しない
+    // 念のためルートごと無効化
     /**
      * Show the form for editing the specified resource.
      * 編集フォーム

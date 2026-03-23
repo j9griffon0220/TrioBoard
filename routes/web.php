@@ -98,7 +98,9 @@ Route::middleware(['auth', 'is_member'])
 
 // Threadのリソースルート
 Route::middleware(['auth'])->group(function(){
-    Route::resource('/threads', ThreadController::class);
+    Route::resource('/threads', ThreadController::class)
+    // / only() を使って、現在実装済みの機能だけに絞る
+    ->only(['index','create','store','show']);
 });
 
 // livewireはコンポーネントとして部品扱いするので、ルーティングで直接読み込まない

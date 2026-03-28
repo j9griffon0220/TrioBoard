@@ -48,9 +48,17 @@ abstract class TestCase extends BaseTestCase
     // 共通アサーション
 
     // 403 Forbidden（アクセスできない）の結果をまとめる
-    protected function assertForbidden($user, string $uri)
+    // GET専用（可読性を優先して分ける）
+    protected function assertGetForbidden($user, string $uri)
     {
         $response = $this->actingAs($user)->get($uri);
+        $response->assertStatus(403);
+    }
+
+    // POST専用
+    protected function assertPostForbidden($user, string $uri, array $data = [])
+    {
+        $response = $this->actingAs($user)->post($uri, $data);
         $response->assertStatus(403);
     }
 }

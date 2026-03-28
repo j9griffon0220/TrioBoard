@@ -8,7 +8,6 @@
   <body @class(['debug-outline' => app()->environment('local')])>
     <div class="min-h-screen bg-board-grey">
       <div class="mx-auto max-w-[90vw] pt-[var(--s3)] pb-[var(--s3)]">
-
         {{-- ヘッダー --}}
         @include('layouts.board_header')
 
@@ -17,7 +16,6 @@
 
         {{-- フッター --}}
         @include('layouts.board_footer')
-
       </div>
     </div>
     @livewireScripts

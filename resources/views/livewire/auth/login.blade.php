@@ -27,9 +27,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
    * Handle an incoming authentication request.
    */
 
-
-    // public function login():
-    public function login(): void
+  // public function login():
+  public function login(): void
   {
     // dd('login reached');
 
@@ -48,9 +47,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
         'login.remember' => $this->remember,
       ]);
 
-    $this->redirect(route('two-factor.login'), navigate: true);
-    return;
-
+      $this->redirect(route('two-factor.login'), navigate: true);
+      return;
     }
 
     Auth::login($user, $this->remember);
@@ -77,24 +75,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
     // }
 
     // まず例外処理、viewer固有の例外ルールで確認
-    if($user->role ===  Role::Viewer&&
-    ! $user->is_active){
-        abort(403, '申し訳ありません。このアカウントは無効です。');
+    if ($user->role === Role::Viewer && ! $user->is_active) {
+      abort(403, '申し訳ありません。このアカウントは無効です。');
     }
 
     // roleによる分岐
     if ($user->role === Role::Admin) {
-    // admin（管理者）はadmin専用ダッシュボードへ
+      // admin（管理者）はadmin専用ダッシュボードへ
       $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
     } elseif ($user->role === Role::Member) {
-    // memberはメンバー用管理画面へ
+      // memberはメンバー用管理画面へ
       $this->redirectIntended(default: route('member.mypage', absolute: false), navigate: true);
     } elseif ($user->role === Role::Viewer) {
-    // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+      // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
       $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
     }
-      }
-
+  }
 
   /**
    * Validate the user's credentials.

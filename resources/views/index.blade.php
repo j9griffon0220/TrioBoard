@@ -12,25 +12,25 @@
   <body @class(['debug-outline' => app()->environment('local')])>
     <div class="flex min-h-screen items-center justify-center bg-board-grey">
       <div class="max-w-[90vw]">
-        <h1 class="mx-auto max-w-[60ch] mb-[var(--s6)]">
-            <img
-              src="{{ asset('images/trio-board-logo.svg') }}"
-              alt="Trio Board Logo"
-              class="h-auto w-full"
-            />
+        <h1 class="mx-auto mb-[var(--s6)] max-w-[60ch]">
+          <img
+            src="{{ asset('images/trio-board-logo.svg') }}"
+            alt="Trio Board Logo"
+            class="h-auto w-full"
+          />
         </h1>
 
-        <p class="mb-[var(--s5)] text-center font-body text-board-black font-normal text-base">
+        <p class="font-body mb-[var(--s5)] text-center text-base font-normal text-board-black">
           アクセス制限のあるメンバー専用掲示板です。ログインしてお入りください。
           <br />
           ご利用ありがとうございます。
         </p>
 
-        <div class="mx-auto mb-[var(--s4)] flex justify-center ">
+        <div class="mx-auto mb-[var(--s4)] flex justify-center">
           <a
             href="{{ route('login') }}"
             {{-- wire:navigate="false" --}}
-            class="inline-flex items-center max-w-[15ch] btn btn-outline"
+            class="inline-flex max-w-[15ch] btn-outline items-center btn"
           >
             <img
               src="{{ asset('images/board-login.svg') }}"
@@ -42,7 +42,6 @@
 
         {{-- フッター --}}
         @include('layouts.board_footer')
-
       </div>
     </div>
   </body>

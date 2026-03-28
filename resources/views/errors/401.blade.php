@@ -2,33 +2,30 @@
 
 @section('board_content')
   <div class="mx-auto mb-[var(--s4)] max-w-[15ch]">
-        <img
-            src="{{ asset('images/board-401.svg') }}"
-            alt="401エラー表示"
-            class="h-auto w-full"
-            />
+    <img src="{{ asset('images/board-401.svg') }}" alt="401エラー表示" class="h-auto w-full" />
   </div>
 
-  <h1 class="text-double-blue font-title text-center mb-[var(--s6)] font-medium text-xl">
+  <h1 class="mb-[var(--s6)] text-center font-title text-xl font-medium text-double-blue">
     401 – ログイン認証が必要です
   </h1>
-  <p class="mb-[var(--s5)] text-center font-body text-board-black font-normal text-base">
+  <p class="font-body mb-[var(--s5)] text-center text-base font-normal text-board-black">
     このページを表示するにはログインが必要です。
     <br />
     お手数ですが、ログインしてから再度お試しください。
   </p>
 
-    {{-- ログイン画面へボタン --}}
-    <div class="flex justify-center mb-[var(--s4)]">
-        <div class="min-w-[15ch] block  text-center btn btn-secondary">
-            <a href="{{ route('login') }}">ログイン画面へ</a>
-        </div>
+  {{-- ログイン画面へボタン --}}
+  <div class="mb-[var(--s4)] flex justify-center">
+    <div class="block min-w-[15ch] btn-secondary btn text-center">
+      <a href="{{ route('login') }}">ログイン画面へ</a>
     </div>
+  </div>
 @endsection
 
-
-{{-- @extends('errors::minimal')
-
-@section('title', __('Unauthorized'))
-@section('code', '401')
-@section('message', __('Unauthorized')) --}}
+{{--
+  @extends('errors::minimal')
+  
+  @section('title', __('Unauthorized'))
+  @section('code', '401')
+  @section('message', __('Unauthorized'))
+--}}

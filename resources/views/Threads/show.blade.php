@@ -11,9 +11,9 @@
   @endcan
 
   {{-- スレッド一覧に戻るボタン --}}
-  <div class="flex justify-end mb-[var(--s4)]">
-    <div class="min-w-[15ch] block  text-center btn btn-secondary">
-        <a href="{{ route('threads.index') }}">スレッド一覧に戻る</a>
+  <div class="mb-[var(--s4)] flex justify-end">
+    <div class="block min-w-[15ch] btn-secondary btn text-center">
+      <a href="{{ route('threads.index') }}">スレッド一覧に戻る</a>
     </div>
   </div>
 @endsection

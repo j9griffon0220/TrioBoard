@@ -34,8 +34,10 @@ it('member、viewerはadminダッシュボードにログイン不可', function
 ]);
 
 it('非登録者はadminダッシュボードにアクセスできない', function(){
-    $this->get('/admin/dashboard')
-    ->assertRedirect('/login');
+    // 非登録者のテストでは $this->actingAs() を使わず、ログインしない状態で進める
+
+    $response = $this->get('/admin/dashboard');
+    $response ->assertRedirect('/login');
 });
 
 

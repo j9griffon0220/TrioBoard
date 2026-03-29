@@ -158,13 +158,24 @@
         background-color: var(--color-board-blue);
     }
 }
-/* @component name-label {
-    relative pl-4
-    &::before{
-        content: '';
-        @apply absolute left-0 top-0 h-full w-[1em] bg-board-blue
+
+/* 管理画面用、マイポスト表示部分の小装飾 */
+@layer components {
+    .post-label {
+        position: relative;
+        padding-left: var(--s-1);
     }
-} */
+
+    .post-label::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0.4em;
+        height: 80%;
+        background-color: var(--color-board-blue);
+    }
+}
 
 
 /* デフォルトの @themeは変更カスタム */

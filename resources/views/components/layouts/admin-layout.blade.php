@@ -1,4 +1,4 @@
-{{-- admin・member管理画面レイアウト 2カラム構造 --}}
+{{-- admin・member共用管理画面レイアウト（2カラム構造見合わせ中） --}}
 <x-layouts.app title="Boardメンバーメニュー">
   <div class="max-w-[90]">
     {{-- メニュー・操作エリア --}}
@@ -16,8 +16,8 @@
       </ul>
     </nav>
 
-    {{-- 右側livewire画面 --}}
-    {{-- <div class="min-h-0 flex-1 flex-shrink-0 flex-grow basis-[30ch]"> --}}
+    {{-- livewire画面（右側見合わせ中） --}}
+    {{-- このlivewireパーツでadmin・memberを出しわける --}}
     <div>
       {{ $slot }}
     </div>

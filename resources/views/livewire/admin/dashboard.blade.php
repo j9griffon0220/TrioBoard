@@ -1,12 +1,11 @@
 {{-- 管理者adminのdashboard --}}
 <div class="">
-  {{-- 右メインサイド --}}
 
   {{-- postごとにまとめる --}}
   @forelse ($posts as $post)
     <div class="mb-[var(--s2)] bg-board-blue/9 p-[var(--s-2)]">
       <div class="flex flex-wrap overflow-hidden">
-        <p class="font-body name-label mr-[var(--s-4)] text-sm font-light text-board-charcoal">
+        <p class="font-body post-label mr-[var(--s-4)] text-sm font-light text-board-charcoal">
           {{ $post->created_at->format('Y-m-d H:i') }}
         </p>
         <p class="font-body mb-[var(--s-4)] text-base font-medium text-double-blue">

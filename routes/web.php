@@ -50,11 +50,11 @@ require __DIR__.'/auth.php';
 
 // adminのルーティングまとめ
 Route::middleware(['auth', 'is_admin'])
-    ->prefix('admin')
+    ->prefix('admin') // ここで「admin/」が予約される
     ->name('admin.')
     ->group(function(){
         // adminの管理画面
-        Route::get('/admin/dashboard', Dashboard::class)
+        Route::get('/dashboard', Dashboard::class)
         ->name('dashboard');
         // 自分の投稿のみを表示
         Route::get('/dashboard/posts', [MyPostController::class, 'myPosts'])
@@ -68,12 +68,13 @@ Route::middleware(['auth', 'is_member'])
     ->name('member.')
     ->group(function(){
         // memberのmypage（管理画面）
-        Route::get('/member/mypage', Mypage::class)
+        Route::get('/mypage', Mypage::class)
         ->name('mypage');
         // 自分の投稿のみを表示
         Route::get('/member/mypage/posts', [MyPostController::class, 'myPosts'])
         ->name('mypage.posts');
     });
+
 
 // Threadのリソースルート
 Route::middleware(['auth'])->group(function(){

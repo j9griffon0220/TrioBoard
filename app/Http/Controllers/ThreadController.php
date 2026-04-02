@@ -25,7 +25,9 @@ class ThreadController extends Controller
     public function index()
     {
         //Threadモデルから最新順に5件ずつ取り出して、threads.indexビューに渡す
-        $threads =Thread::latest()->paginate(5);
+        // $threads =Thread::latest()->paginate(5);
+        // スタイリングのために->paginate(2)にして調整
+        $threads =Thread::latest()->paginate(2);
         return view('threads.index',compact('threads'));
     }
 

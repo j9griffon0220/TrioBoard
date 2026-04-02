@@ -2,13 +2,14 @@
   xmlns="http://www.w3.org/2000/svg"
   version="1.1"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="96.83"
-  height="132.26"
+  {{-- width="96.83"
+  height="132.26" --}}
   id="SvgjsSvg1005"
-  data-name="ﾑ4"
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 96.83 132.26"
+  class="w-full h-auto"
 >
+
   <defs>
     <style>
       .cls-1 {

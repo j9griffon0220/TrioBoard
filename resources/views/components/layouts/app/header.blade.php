@@ -1,3 +1,4 @@
+{{-- 管理画面デフォルトのheader設定 --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
   <head>
@@ -10,15 +11,16 @@
     >
       {{-- <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" /> --}}
 
-      <a
+      {{-- デフォルトのdashboardリンクをコメントアウト --}}
+      {{-- <a
         href="{{ route('dashboard') }}"
         class="ms-2 me-5 flex items-center space-x-2 lg:ms-0 rtl:space-x-reverse"
         wire:navigate
-      >
+      > --}}
         <x-app-logo />
-      </a>
+      {{-- </a> --}}
 
-      <flux:navbar class="-mb-px max-lg:hidden">
+      {{-- <flux:navbar class="-mb-px max-lg:hidden">
         <flux:navbar.item
           icon="layout-grid"
           :href="route('dashboard')"
@@ -27,7 +29,7 @@
         >
           {{ __('Dashboard') }}
         </flux:navbar.item>
-      </flux:navbar>
+      </flux:navbar> --}}
 
       <flux:spacer />
 
@@ -93,13 +95,13 @@
     >
       <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-      <a
+      {{-- <a
         href="{{ route('dashboard') }}"
         class="ms-1 flex items-center space-x-2 rtl:space-x-reverse"
         wire:navigate
-      >
+      > --}}
         <x-app-logo />
-      </a>
+      {{-- </a> --}}
 
       {{--
         <flux:navlist variant="outline">
@@ -127,7 +129,7 @@
         >
         {{ __('Repository') }}
         </flux:navlist.item>
-        
+
         <flux:navlist.item
         icon="book-open-text"
         href="https://laravel.com/docs/starter-kits#livewire"

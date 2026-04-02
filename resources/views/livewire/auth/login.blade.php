@@ -38,6 +38,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     $user = $this->validateCredentials();
 
+    // --- 2FA チェック ---
     if (
       Features::canManageTwoFactorAuthentication() &&
       $user->hasEnabledTwoFactorAuthentication()
@@ -51,6 +52,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
       return;
     }
 
+    // --- ログイン処理 ---
     Auth::login($user, $this->remember);
 
     RateLimiter::clear($this->throttleKey());
@@ -58,38 +60,41 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     // return redirect()->intended(route('dashboard'));
 
-    $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     $user = auth()->user();
-
-    // // ロールに応じてリダイレクト先を変更
-
-    // if ($user->role === Role::Admin) {
-    // // admin（管理者）はadmin専用ダッシュボードへ
-    //   return redirect('/admin'); // ← wire:navigate を使わない
-    // } elseif ($user->role === Role::Member) {
-    // // memberはメンバー用管理画面へ
-    //   return redirect('/member');
-    // } elseif ($user->role === Role::Viewer) {
-    // // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
-    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
-    // }
 
     // まず例外処理、viewer固有の例外ルールで確認
     if ($user->role === Role::Viewer && ! $user->is_active) {
       abort(403, '申し訳ありません。このアカウントは無効です。');
     }
 
-    // roleによる分岐
     if ($user->role === Role::Admin) {
       // admin（管理者）はadmin専用ダッシュボードへ
       $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+      return;
+      // $this->redirect(route('admin.dashboard'), navigate: true);
     } elseif ($user->role === Role::Member) {
       // memberはメンバー用管理画面へ
       $this->redirectIntended(default: route('member.mypage', absolute: false), navigate: true);
+      return;
     } elseif ($user->role === Role::Viewer) {
       // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
       $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+      return;
     }
+
+    // いったんコメントアウト
+    // if ($user->role === Role::Admin) {
+    // // admin（管理者）はadmin専用ダッシュボードへ
+    // $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+    // // $this->redirect(route('admin.dashboard'), navigate: true);
+    // } elseif ($user->role === Role::Member) {
+    //   // memberはメンバー用管理画面へ
+    //   $this->redirectIntended(default: route('member.mypage', absolute: false), navigate: true);
+    // } elseif ($user->role === Role::Viewer) {
+    //   // viewerは管理画面に行かずに閲覧のみのためスレッド一覧へ
+    //   $this->redirectIntended(default: route('threads.index', absolute: false), navigate: true);
+    // }
   }
 
   /**

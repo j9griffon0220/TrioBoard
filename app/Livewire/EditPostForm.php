@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Post;
 
 // 投稿されたpostを編集するためのコンポーネント
+// 現状postを編集するためのコンポーネントはまだ使わない
 
 class EditPostForm extends Component
 {

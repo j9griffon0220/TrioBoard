@@ -20,7 +20,8 @@ class PostForm extends Component
         $this->thread = $thread;
     }
 
-    public $posts = [];
+    // public $posts = [];
+    // public プロパティは UI の状態だけ
     public $postId = '';
     public $title = '';
     public $body = '';

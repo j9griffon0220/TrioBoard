@@ -44,6 +44,16 @@ abstract class TestCase extends BaseTestCase
     // User::factory()->create([...]) を呼ぶと 必ずユーザーがDBに作成される
     // → つまり「存在するユーザー」になってしまう
 
+    // テスト用のデータを用意する
+    // テスト本体で使う dataset は「変えたい部分だけ」にする
+    protected function validPostData(array $override = [])
+    {
+        return array_merge([
+            'title' => 'テストタイトル',
+            'body' => 'テスト本文',
+        ], $override);
+    }
+
 
     // 共通アサーション
 

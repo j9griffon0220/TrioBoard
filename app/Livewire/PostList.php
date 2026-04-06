@@ -8,44 +8,39 @@ use App\Models\Post;
 use App\Models\User;
 use App\Enums\Role;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
 
 class PostList extends Component
 {
-    // Livewireでは publicプロパティはリアクティブ変数
-    public $posts = [];
+    // class直下の記述がルール・使うと宣言
+    use WithPagination;
 
-    // blade から渡されるThread を受け取る
     public Thread $thread;
 
     public function mount(Thread $thread)
     {
+        // blade から渡されるThread（目印）を受け取る
         $this->thread = $thread;
     }
 
     public function render()
     {
-        $this->posts = $this->thread->posts()->oldest()->get();
-        // デバッグ
-        // dd($posts);
-        // dd($this->selectedthread->posts()->count());
-        return view('livewire.post-list');
-    }
-
-    // 子のpost-formで投稿があったときに投稿一覧をロードするメソッド
-    public function loadPosts()
-    {
-        // whereで条件指定、thread_idが今のスレッドIDと一致する投稿だけを絞り込む
-        $this->posts = post::where('thread_id', $this->thread->id)
-        ->oldest() // 投稿日時の古い順に並べる
-        ->get();   // 実行して投稿一覧を取得する
+        // DB のデータは render() で毎回取得
+        return view('livewire.post-list',[
+            'posts' => Post::where('thread_id', $this->thread->id)
+            ->oldest()
+            ->paginate(10),
+        ]);
     }
 
     // 子のpost-formから送られたイベントを受け取る
     #[On('postAdded')]
     public function refresh($post)
     {
+        // 投稿後の更新
+        $this->resetPage();
         // 上記loadPosts()メソッドを実行
-        $this->loadPosts();
+        // $this->loadPosts();
     }
 
 }

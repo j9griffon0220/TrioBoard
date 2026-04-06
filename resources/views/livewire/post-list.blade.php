@@ -4,10 +4,10 @@
     「{{ $thread->title }}」のポスト一覧
   </h1>
 
-  @forelse ($this->posts as $post)
+  @forelse ($posts as $post)
     {{-- postごとにまとめる --}}
-    <div class="mb-[var(--s5)] max-w-[90vw] bg-board-blue/9 p-[var(--s-1)]">
-      <div class="mb-[var(--s-4)] flex max-w-[50ch] items-baseline gap-2">
+    <div class="mb-[var(--s5)] max-w-[90vw] bg-board-blue/8 p-[var(--s-1)]">
+      <div class="mb-[var(--s-6)] flex max-w-[50ch] items-baseline gap-2">
         <p class="font-body name-label text-sm font-normal text-board-black">
           {{ optional($post->user)->name ?? '(投稿者不明)' }}
         </p>
@@ -19,15 +19,20 @@
         </span>
       </div>
       <div class="max-w-[50ch]">
-        <p class="font-body mb-[var(--s-4)] text-base font-normal text-board-black">
+        <p class="font-body mb-[var(--s-6)] text-base font-normal text-double-blue">
           {{ $post->title }}
         </p>
         <p class="font-body text-base font-normal text-board-black">{{ $post->body }}</p>
       </div>
     </div>
   @empty
-    <p class="font-body mb-[var(--s-4)] text-base font-normal text-board-black">
+    <p class="font-body mb-[var(--s-6)] text-base font-normal text-board-black">
       投稿がまだありません
     </p>
   @endforelse
+
+  {{-- ページネーションリンクの表示 --}}
+  <div class="mb-[var(--s4)]">
+    {{ $posts->links('vendor.pagination.tailwind') }}
+  </div>
 </div>

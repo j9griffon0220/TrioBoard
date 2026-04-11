@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use App\Enums\Role;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\MemberSeeder;
+use Database\Seeders\RealMemberSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +24,7 @@ class DatabaseSeeder extends Seeder
             // 初めの[]は検索条件
             ['email' => config('admin.email')],
             // 次の[]は更新 or 作成する内容
-            ['name' => 'admin',
+            ['name' => config('admin.name'),
             'password' => Hash::make(config('admin.password')),
             'role' => Role::Admin->value,
             ]
@@ -42,10 +43,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // ローカル時のみMemberSeederを実行
+        // RealMemberSeederは常に必要
+        $this->call(RealMemberSeeder::class);
+
+        // ローカル時のみ仮のMemberSeederも実行
         if(app()->environment('local')){
             $this->call(MemberSeeder::class);
         }
+
+
 
         // User::factory(10)->create();
 

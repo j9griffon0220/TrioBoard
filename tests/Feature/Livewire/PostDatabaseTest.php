@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Thread;
+use App\Models\Post;
 use App\Livewire\PostForm;
 use Livewire\Livewire;
 use App\Enums\Role;
@@ -69,9 +70,12 @@ it('AdminのPost投稿がバリデーションエラーでDBに保存されな�
     ->set('body', '')
     // set()に$inputをそのまま渡すのはドキュメントにない使い方＝保証されないので避ける
     ->call('store')
-    ->assertDatabeseCount('posts', 0);
+    // まずLivewireとしてエラーがあるか確認
     // assertHasErrorsは検証したいキーを必ず指定
-    // ->assertHasErrors(['title', 'body']);
+    ->assertHasErrors(['title', 'body']);
+
+    // Livewireの世界とPHPUnitの世界は別、とのこと。DB系アサーションは必ず $this->
+    $this->assertDatabaseCount('posts', 0);
 });
 
 

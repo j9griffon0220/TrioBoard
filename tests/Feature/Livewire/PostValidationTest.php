@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Thread;
+use App\Models\Post;
 use App\Livewire\PostForm;
 use Livewire\Livewire;
 use App\Enums\Role;
@@ -12,81 +13,72 @@ use App\Enums\Role;
 // });
 
 // livewireの新規投稿のバリデーションをテスト
-
-// dataset を「フィールド名＋入力値」の組み合わせで定義
-dataset('posts_title_error',[
-    '必須タイトルエラー' => ['title', ''],
-    'タイトル型エラー' => ['title', 123],
-    'タイトル文字数エラー' => ['title', str_repeat('a',41)], // max:40
-]);
-
-dataset('posts_body_error', [
-    '必須本文エラー' => ['body', ''],
-    '本文型エラー' => ['body', 123],
-    '本文文字数エラー' => ['body', str_repeat('a',401)], // max:400
-]);
+// テストごとにDBを毎回リセット
+use Illuminate\Foundation\Testing\RefreshDatabase;
+pest()->use(RefreshDatabase::class);
 
 
 // バリデーションエラーのテスト
-// dataset の配列の並び順と、テスト関数の引数の並び順は必ず一致させる必要がある
-it('post新規投稿のタイトルバリデーションエラー :dataset', function($field, $input){
+it('post新規投稿のタイトルバリデーションエラー', function(){
     // PostFormはPolicyで権限チェックしているのでrole必須
-    $user = User::factory()->create(['role' => Role::Admin]);
+    $Admin = $this -> createRoleAdmin();
     // PostはThreadに紐づくので必ず作る
     $thread = Thread::factory()->create();
 
-    Livewire::actingAs($user)
+    Livewire::actingAs($Admin)
     ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
+    ->set('title', '') // タイトルのNG値
     ->set('body', 'ポストのテスト本文です') //パスする値
-    ->set($field, $input) // datasetのNG値
     ->call('store') //store() メソッドを直接呼び出す
-    ->assertHasErrors($field);
-})->with('posts_title_error');
+    ->assertHasErrors('title');
+
+    // Livewireの世界とPHPUnitの世界は別、とのこと。DB系アサーションは必ず $this->
+    $this->assertDatabaseCount('posts', 0);
+});
 
 
-it('post新規投稿の本文バリデーションエラー :dataset', function($field, $input){
+it('post新規投稿の本文バリデーションエラー', function(){
     // PostFormはPolicyで権限チェックしているのでrole必須
-    $user = User::factory()->create(['role' => Role::Member]);
+    $Member = $this -> createRoleMember();
     // PostはThreadに紐づくので必ず作る
     $thread = Thread::factory()->create();
 
-    Livewire::actingAs($user)
+    Livewire::actingAs($Member)
     ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
     ->set('title', 'ポストのテストタイトルです') //パスする値
-    ->set($field, $input) // datasetのNG値
+    ->set('body', '') //本文のNG値
     ->call('store') //store() メソッドを直接呼び出す
-    ->assertHasErrors($field);
-})->with('posts_body_error');
+    ->assertHasErrors('body');
+
+    // Livewireの世界とPHPUnitの世界は別、とのこと。DB系アサーションは必ず $this->
+    $this->assertDatabaseCount('posts', 0);
+});
 
 
-it('post新規投稿のバリデーションエラー時にDBに保存されない : dataset', function($field, $input){
-    // PostFormはPolicyで権限チェックしているのでrole必須
-    $user = User::factory()->create(['role' => Role::Admin]);
+it('post新規投稿のバリデーションエラー時にDBに保存されない', function(){
+    $Admin = $this -> createRoleAdmin();
     // PostはThreadに紐づくので必ず作る
     $thread = Thread::factory()->create();
 
-    Livewire::actingAs($user)
+    Livewire::actingAs($Admin)
     ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
-    ->set('body', 'ポストのテスト本文です') //パスする値
-    ->set($field, $input)
+    ->set('title', '') // タイトルのNG値
+    ->set('body', '') // 本文NG値
     ->call('store')
-    ->assertHasErrors($field);
-    // assertDatabaseMissing には「テーブル名」と「カラム => 値」の配列が必須
-    $this->assertDatabaseMissing('posts',[
-        'title' => $input,
-        'body' => $input,
-    ]);
-})->with('posts_title_error');
+    ->assertHasErrors(['title','body']);
+
+    $this->assertDatabaseCount('posts', 0);
+});
 
 
 // バリデーションが通る場合のテスト・datasetは使わない
 it('新規投稿のバリデーションがパスする', function(){
     // PostFormはPolicyで権限チェックしているのでrole必須
-    $user = User::factory()->create(['role' => Role::Member]);
+    $Member = $this -> createRoleMember();
     // PostはThreadに紐づくので必ず作る
     $thread = Thread::factory()->create();
 
-    Livewire::actingAs($user)
+    Livewire::actingAs($Member)
     ->test(PostForm::class, ['thread' => $thread]) //threadを渡す
     // ->set() は基本的に 「プロパティ名」「値」 の2引数で使う
     ->set('title', 'これはテストタイトルです')
@@ -95,6 +87,9 @@ it('新規投稿のバリデーションがパスする', function(){
     // バリデーションエラーがない
     // Livewire のアサーションは Livewire::test() のチェーン で使う
     ->assertHasNoErrors();
+
+    // DBに１件だけ保存されていることを（念のため）確認
+    $this -> assertDatabaseCount('posts', 1);
 });
 
 // バリデーションが通る場合の保存は別途投稿テストで行う

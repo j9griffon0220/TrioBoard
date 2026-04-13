@@ -25,6 +25,10 @@ yarn-error.log
 /.tailwind-cache
 /resources/views/livewire/*.volt.php
 
+# githubへのプッシュ時エラー対策
+.github/workflows
+
+
 
 # --- Logs & Debug ---
 npm-debug.log*

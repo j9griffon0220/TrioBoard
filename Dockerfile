@@ -4,7 +4,8 @@
 
 # 1. ベースイメージの指定 (PHP 8.3/8.4推奨ですが、composerに合わせ8.2以上を確保)
 # Laravel 12 は PHP 8.2+ が必須。PHP 8.2 対応の FrankenPHP イメージ
-FROM dunglas/frankenphp:latest-php8.4
+# FROM dunglas/frankenphp:latest-php8.4
+FROM dunglas/frankenphp:1-php8.4
 
 # 2. Dockerの中に Composerそのものを入れる
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

@@ -2,12 +2,12 @@
 # Docker内でのビルド（マルチステージビルド方式）はせず、ローカルで npm run build
 # 理由：トラブル時のデバッグを考慮（難易度が上がる）、renderの無料枠を意識
 
-# 1. Dockerの中に Composerそのものを入れる
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# 2. ベースイメージの指定 (PHP 8.3/8.4推奨ですが、composerに合わせ8.2以上を確保)
+# 1. ベースイメージの指定 (PHP 8.3/8.4推奨ですが、composerに合わせ8.2以上を確保)
 # Laravel 12 は PHP 8.2+ が必須。PHP 8.2 対応の FrankenPHP イメージ
 FROM dunglas/frankenphp:latest-php8.4
+
+# 2. Dockerの中に Composerそのものを入れる
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # 3. PHP拡張のインストール (Neon/PostgreSQL用)
 RUN install-php-extensions \

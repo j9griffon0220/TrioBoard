@@ -36,11 +36,11 @@ COPY . .
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # 8. 権限設定
-RUN chown -R www-data:www-data storage bootstrap/cache
+# RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Exited with status 126エラー対策
 # 実行権限を確実にする（126エラー対策）
-# バイナリに「動かしていいよ」という許可を与えます
+# バイナリに「動かしていいよ」という許可を与える
 RUN chmod +x /usr/local/bin/frankenphp
 
 # 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)

@@ -41,16 +41,18 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # Exited with status 126エラー対策
 # 実行権限を確実にする（126エラー対策）
 # バイナリに「動かしていいよ」という許可を与える
-RUN chmod +x /usr/local/bin/frankenphp
+# RUN chmod +x /usr/local/bin/frankenphp
 
 # 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)
 # 起動時に migrate を実行し、成功したら FrankenPHP を起動する
-CMD php artisan migrate --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    frankenphp run \
-    --config /etc/caddy/Caddyfile \
-    --adapter caddyfile \
-    --port ${PORT:-10000}
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+# CMD php artisan migrate --force && \
+#     php artisan config:cache && \
+#     php artisan route:cache && \
+#     php artisan view:cache && \
+#     frankenphp run \
+#     --config /etc/caddy/Caddyfile \
+#     --adapter caddyfile \
+#     --port ${PORT:-10000}
+
     # frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile --port ${PORT:-10000}

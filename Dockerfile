@@ -44,8 +44,11 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # RUN chmod +x /usr/local/bin/frankenphp
 
 # 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)
+# caddy と直接書くのではなく、frankenphp run を使います
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+
 # 起動時に migrate を実行し、成功したら FrankenPHP を起動する
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+# CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
 # CMD php artisan migrate --force && \
 #     php artisan config:cache && \
 #     php artisan route:cache && \

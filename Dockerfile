@@ -5,8 +5,8 @@
 # 1. ベースイメージの指定 (PHP 8.3/8.4推奨ですが、composerに合わせ8.2以上を確保)
 # Laravel 12 は PHP 8.2+ が必須。PHP 8.2 対応の FrankenPHP イメージ
 # FROM dunglas/frankenphp:latest-php8.4
-# FROM dunglas/frankenphp:1-php8.4
-FROM dunglas/frankenphp:latest
+FROM dunglas/frankenphp:1-php8.4
+# FROM dunglas/frankenphp:latest
 
 # 2. Dockerの中に Composerそのものを入れる
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -46,7 +46,8 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)
 # caddy と直接書くのではなく、frankenphp run を使います
-CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:10000"]
+ENTRYPOINT ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+# CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:10000"]
 
 # CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 

@@ -19,22 +19,38 @@ RUN install-php-extensions \
     bcmath \
     opcache
 
-# 4. 環境変数の設定
+# --- 非rootユーザー設定の追加 ---
+# 4. 実行用ユーザー(appuser)を作成
+ARG USER=appuser
+RUN useradd -m ${USER}
+
+# 5. 環境変数の設定
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV APP_LOG=errorlog
 # FrankenPHPがリッスンするポート。Renderの $PORT を参照するように設定
 ENV SERVER_NAME=:10000
 
-# 5. 作業ディレクトリ
+# 6. 作業ディレクトリ
 WORKDIR /app
 
-# 6. プロジェクトファイルをコピー
+# 7. プロジェクトファイルをコピー
 # ローカルでビルドした public/build 等もここで一緒にコピーされる
 COPY . .
 
-# 7. Composer を使って Laravel の依存パッケージをインストールする
+# 8. 所有権の変更 (ここが重要！)
+# /app フォルダと、FrankenPHPが使う設定フォルダの所有者を appuser に変える
+RUN chown -R ${USER}:${USER} /app /config/caddy /data/caddy
+
+# 9. Composer を使って Laravel の依存パッケージをインストールする
 RUN composer install --no-interaction --no-dev --optimize-autoloader
+
+# 10. 実行ユーザーの切り替え
+# これ以降の命令や、アプリの実行は appuser 権限で行われる
+USER ${USER}
+
+# 11. 起動コマンド（ENTRYPOINTからCMDに変更）
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 
 # 8. 権限設定
 # RUN chown -R www-data:www-data storage bootstrap/cache
@@ -46,7 +62,7 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)
 # caddy と直接書くのではなく、frankenphp run を使います
-ENTRYPOINT ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+# ENTRYPOINT ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 # CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:10000"]
 
 # CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

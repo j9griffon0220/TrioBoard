@@ -54,7 +54,9 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 USER ${USER}
 
 # 11. 起動コマンド（ENTRYPOINTからCMDに変更）
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+# 修正後: シェル形式（文字列）で記述し、&& で繋ぎます
+CMD php artisan migrate --force --seed && frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile
+# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
 # --listen を使って、Renderが期待するポートで待ち受ける
 # CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--listen", ":10000"]
 # CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

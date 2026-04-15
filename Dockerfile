@@ -24,25 +24,29 @@ RUN install-php-extensions \
 ARG USER=appuser
 RUN useradd -m ${USER}
 
-# 5. 環境変数の設定
+# 5. 【重要】マニュアルに従い、特権ポート用のケーパビリティを削除
+# これにより、root以外のユーザーでもエラーなく起動できるようになる
+RUN setcap -r /usr/local/bin/frankenphp
+
+# 6. 環境変数の設定
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV APP_LOG=errorlog
 # FrankenPHPがリッスンするポート。Renderの $PORT を参照するように設定
 ENV SERVER_NAME=:10000
 
-# 6. 作業ディレクトリ
+# 7. 作業ディレクトリ
 WORKDIR /app
 
-# 7. プロジェクトファイルをコピー
+# 8. プロジェクトファイルをコピー
 # ローカルでビルドした public/build 等もここで一緒にコピーされる
 COPY . .
 
-# 8. 所有権の変更 (ここが重要！)
+# 9. 所有権の変更 (ここが重要！)
 # /app フォルダと、FrankenPHPが使う設定フォルダの所有者を appuser に変える
 RUN chown -R ${USER}:${USER} /app /config/caddy /data/caddy
 
-# 9. Composer を使って Laravel の依存パッケージをインストールする
+# 10. Composer を使って Laravel の依存パッケージをインストールする
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # 10. 実行ユーザーの切り替え
@@ -50,7 +54,9 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 USER ${USER}
 
 # 11. 起動コマンド（ENTRYPOINTからCMDに変更）
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+# --listen を使って、Renderが期待するポートで待ち受ける
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--listen", ":10000"]
+# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 
 # 8. 権限設定
 # RUN chown -R www-data:www-data storage bootstrap/cache

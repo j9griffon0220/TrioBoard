@@ -1,13 +1,17 @@
 # 26.4現在：Node.jsの記述なし
 # Docker内でのビルド（マルチステージビルド方式）はせず、ローカルで npm run build
-# 理由：トラブル時のデバッグを考慮（難易度が上がる）、Koyebの無料枠を意識
+# 理由：トラブル時のデバッグを考慮（難易度が上がる）、renderの無料枠を意識
 
 # 1. ベースイメージの指定 (PHP 8.3/8.4推奨ですが、composerに合わせ8.2以上を確保)
 # Laravel 12 は PHP 8.2+ が必須。PHP 8.2 対応の FrankenPHP イメージ
-FROM dunglas/frankenphp:latest-php8.4
+# FROM dunglas/frankenphp:latest-php8.4
+FROM dunglas/frankenphp:1-php8.4
+# FROM dunglas/frankenphp:latest
 
-# 2. 必要な PHP 拡張機能をインストール
-# Neon(PostgreSQL)を使うための pdo_pgsql を含めています。
+# 2. Dockerの中に Composerそのものを入れる
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# 3. PHP拡張のインストール (Neon/PostgreSQL用)
 RUN install-php-extensions \
     pdo_pgsql \
     intl \
@@ -15,34 +19,72 @@ RUN install-php-extensions \
     bcmath \
     opcache
 
-# 3. 環境変数の設定 (Koyebのデフォルトポート 80 に合わせる)
-ENV SERVER_NAME=:80
+# --- 非rootユーザー設定の追加 ---
+# 4. 実行用ユーザー(appuser)を作成
+ARG USER=appuser
+RUN useradd -m ${USER}
+
+# 5. 【重要】マニュアルに従い、特権ポート用のケーパビリティを削除
+# これにより、root以外のユーザーでもエラーなく起動できるようになる
+RUN setcap -r /usr/local/bin/frankenphp
+
+# 6. 環境変数の設定
 ENV APP_ENV=production
 ENV APP_DEBUG=false
+ENV APP_LOG=errorlog
+# FrankenPHPがリッスンするポート。Renderの $PORT を参照するように設定
+ENV SERVER_NAME=:10000
 
-# 4. 作業ディレクトリの設定
+# 7. 作業ディレクトリ
 WORKDIR /app
 
-# 5. プロジェクトファイルのコピー
-# .dockerignore で指定したファイル以外がすべてコピーされます。
+# 8. プロジェクトファイルをコピー
+# ローカルでビルドした public/build 等もここで一緒にコピーされる
 COPY . .
 
-# 6. Composer のインストール (本番環境用の最適化)
-# `--no-dev` で開発用パッケージを除外。autoloadを最適化。
-RUN composer install --non-interactive --no-dev --optimize-autoloader
+# 9. 所有権の変更 (ここが重要！)
+# /app フォルダと、FrankenPHPが使う設定フォルダの所有者を appuser に変える
+RUN chown -R ${USER}:${USER} /app /config/caddy /data/caddy
 
-# Laravel のキャッシュ生成（任意）
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache || true
+# 10. Composer を使って Laravel の依存パッケージをインストールする
+RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# 7. 権限の設定 (重要)
-# サーバーが storage フォルダに書き込めるようにします。
-RUN chown -R www-data:www-data storage bootstrap/cache
+# 10. 実行ユーザーの切り替え
+# これ以降の命令や、アプリの実行は appuser 権限で行われる
+USER ${USER}
 
-# 8. エントリポイント設定
-# Octaneを使わない場合、FrankenPHPに直接 index.php を処理させます。
-ENV FRANKENPHP_CONFIG="worker ./public/index.php"
+# 11. 起動コマンド（ENTRYPOINTからCMDに変更）
+# 修正後: シェル形式（文字列）で記述し、&& で繋ぎます
+CMD php artisan migrate --force --seed && frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile
+# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+# --listen を使って、Renderが期待するポートで待ち受ける
+# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--listen", ":10000"]
+# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 
-# Koyeb が渡す $PORT を使って FrankenPHP を起動
-CMD ["frankenphp", "run", "--port=${PORT:-8000}", "--workers=4", "--public=/app/public"]
+# 8. 権限設定
+# RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Exited with status 126エラー対策
+# 実行権限を確実にする（126エラー対策）
+# バイナリに「動かしていいよ」という許可を与える
+# RUN chmod +x /usr/local/bin/frankenphp
+
+# 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)
+# caddy と直接書くのではなく、frankenphp run を使います
+# ENTRYPOINT ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+# CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:10000"]
+
+# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+
+# 起動時に migrate を実行し、成功したら FrankenPHP を起動する
+# CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+# CMD php artisan migrate --force && \
+#     php artisan config:cache && \
+#     php artisan route:cache && \
+#     php artisan view:cache && \
+#     frankenphp run \
+#     --config /etc/caddy/Caddyfile \
+#     --adapter caddyfile \
+#     --port ${PORT:-10000}
+
+    # frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile --port ${PORT:-10000}

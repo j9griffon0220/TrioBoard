@@ -1,6 +1,6 @@
 {{-- admin・member共用管理画面レイアウト（2カラム構造見合わせ中） --}}
 <x-layouts.app title="Boardメンバーメニュー">
-  <div class="max-w-[90]">
+  <div>
     {{-- メニュー・操作エリア --}}
     <nav>
       <ul class="mb-[var(--s3)] flex w-full flex-wrap items-center">

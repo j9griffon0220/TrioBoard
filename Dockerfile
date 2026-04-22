@@ -4,9 +4,7 @@
 
 # 1. ベースイメージの指定 (PHP 8.3/8.4推奨ですが、composerに合わせ8.2以上を確保)
 # Laravel 12 は PHP 8.2+ が必須。PHP 8.2 対応の FrankenPHP イメージ
-# FROM dunglas/frankenphp:latest-php8.4
 FROM dunglas/frankenphp:1-php8.4
-# FROM dunglas/frankenphp:latest
 
 # 2. Dockerの中に Composerそのものを入れる
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -18,6 +16,7 @@ RUN install-php-extensions \
     zip \
     bcmath \
     opcache
+
 
 # --- 非rootユーザー設定の追加 ---
 # 4. 実行用ユーザー(appuser)を作成
@@ -49,42 +48,12 @@ RUN chown -R ${USER}:${USER} /app /config/caddy /data/caddy
 # 10. Composer を使って Laravel の依存パッケージをインストールする
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# 10. 実行ユーザーの切り替え
+# 11. 実行ユーザーの切り替え
 # これ以降の命令や、アプリの実行は appuser 権限で行われる
 USER ${USER}
 
-# 11. 起動コマンド（ENTRYPOINTからCMDに変更）
-# 修正後: シェル形式（文字列）で記述し、&& で繋ぎます
+# 12. 起動コマンド（ENTRYPOINTからCMDに変更）
+# 修正後: シェル形式（文字列）で記述し、&& で繋ぐ
 CMD php artisan migrate --force --seed && frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile
-# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
-# --listen を使って、Renderが期待するポートで待ち受ける
-# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--listen", ":10000"]
-# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 
-# 8. 権限設定
-# RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Exited with status 126エラー対策
-# 実行権限を確実にする（126エラー対策）
-# バイナリに「動かしていいよ」という許可を与える
-# RUN chmod +x /usr/local/bin/frankenphp
-
-# 9. 起動コマンド (シェルスクリプトを使わず、&& で繋いで実行)
-# caddy と直接書くのではなく、frankenphp run を使います
-# ENTRYPOINT ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
-# CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:10000"]
-
-# CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
-
-# 起動時に migrate を実行し、成功したら FrankenPHP を起動する
-# CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
-# CMD php artisan migrate --force && \
-#     php artisan config:cache && \
-#     php artisan route:cache && \
-#     php artisan view:cache && \
-#     frankenphp run \
-#     --config /etc/caddy/Caddyfile \
-#     --adapter caddyfile \
-#     --port ${PORT:-10000}
-
-    # frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile --port ${PORT:-10000}

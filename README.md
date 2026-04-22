@@ -1,7 +1,7 @@
 # Trio Board – Laravel 12 × Livewire × Pest
 
-[**デモサイトを見る**(#) ]（デプロイ準備中・公開後にURLを掲載予定）
-※現在はローカル環境で動作確認可能です。
+[**デモサイトを見る (https://trioboard.onrender.com)**](https://trioboard.onrender.com)
+※ 現在は Render 上で動作しています。
 
 ## 概要 （Overview）
 
@@ -14,7 +14,7 @@ Laravel 12 を用いて構築した掲示板アプリケーションです。
 - Role Enum（admin / member / viewer）による権限管理
   - admin：投稿・閲覧（Dashboardあり）
   - member：投稿・閲覧（My pageあり）
-  - viewer：閲覧のみ（ポートフォリオ公開用）
+  - viewer：閲覧のみ（外部公開用）
 - 掲示板（Thread）機能
   - Resource Controller による CRUD 実装
   - Thread / Post のリレーション設計
@@ -23,7 +23,14 @@ Laravel 12 を用いて構築した掲示板アプリケーションです。
 
 ## 技術的な実装ポイント（Technical Highlights）
 
-- 調整中
+- Laravel 12 + Livewire によるリアクティブな掲示板機能の実装
+  - ページ遷移なしでの投稿・一覧更新を実現
+- 外部公開用に閲覧専用ロール（Viewer）を実装
+  - 権限ベースのアクセス制御により、安全な閲覧範囲を制御
+- Docker ベースの本番環境を構築（Render）
+  - FrankenPHP 環境に対応するため、Dockerfileや起動設定を調整
+- Neon（クラウド PostgreSQL）を利用した外部DB連携
+  - アプリケーションとDBを分離した構成を採用
 
 ### 開発環境
 
@@ -32,10 +39,10 @@ Laravel 12 を用いて構築した掲示板アプリケーションです。
 
 ### 使用技術 （Tech Stack）
 
-- バックエンド：Laravel 12（PHP 8.3）
-- フロントエンド：Vite / TailwindCSS 4 / Livewire 4
-- 認証：Laravel Starter Kit（Livewire4）
-- テスト：Pest（Unit / Feature）
+- バックエンド：Laravel 12（PHP 8.2）
+- フロントエンド：Vite / TailwindCSS 4 / Livewire 3
+- 認証：Laravel Starter Kit（Livewire3）
+- テスト：Pest（Feature）
 
 ### テスト
 
@@ -58,7 +65,8 @@ npm run dev
 
 ## 制限事項 （Limitations）
 
-検討中
+- 閲覧専用ロール（Viewer）はポートフォリオ公開用に限定的に有効化しています
+  - 本来はメンバー限定の掲示板であり、一般公開は想定していません（セキュリティ上、公開期間終了後は無効化予定）
 
 ## ビルド方法 （Build）
 

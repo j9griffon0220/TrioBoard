@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // admin専用ミドルウェアを追加
         $middleware->alias([
             'is_admin' => \App\Http\Middleware\IsAdmin::class,
-            'is_member' => \App\Http\middleware\IsMember::class,
+            'is_member' => \App\Http\Middleware\IsMember::class,
         ]);
 
             RedirectIfAuthenticated::redirectUsing(function () {

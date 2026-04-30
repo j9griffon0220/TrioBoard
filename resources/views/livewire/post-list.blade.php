@@ -22,7 +22,9 @@
         <p class="font-body mb-[var(--s-6)] text-base font-normal text-double-blue">
           {{ $post->title }}
         </p>
-        <p class="font-body text-base font-normal text-board-black">{{ $post->body }}</p>
+        <p class="font-body text-base font-normal break-all whitespace-pre-line text-board-black">
+          {{ $post->body }}
+        </p>
       </div>
     </div>
   @empty

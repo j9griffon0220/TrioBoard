@@ -1,8 +1,8 @@
 <div>
   {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
-  <h1 class="mb-[var(--s4)] text-center font-title text-2xl font-medium text-double-blue">
+  <h2 class="mb-[var(--s4)] text-center font-title text-2xl font-medium text-double-blue">
     投稿フォーム
-  </h1>
+  </h2>
 
   <div class="mb-[var(--s6)] max-w-[90vw] bg-board-blue/8 p-[var(--s2)]">
     <form wire:submit.prevent="store">

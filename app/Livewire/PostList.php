@@ -28,7 +28,7 @@ class PostList extends Component
         // DB のデータは render() で毎回取得
         return view('livewire.post-list',[
             'posts' => Post::where('thread_id', $this->thread->id)
-            ->oldest()
+            ->latest()
             ->paginate(10),
         ]);
     }

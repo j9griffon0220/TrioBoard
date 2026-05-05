@@ -35,7 +35,7 @@ class PostForm extends Component
     // コンポーネント単位のバリデーション設定
     protected $rules = [
         'title' => 'required|string|max:40',
-        'body' => 'required|string|max:400',
+        'body' => 'required|string|max:1000',
     ];
 
     public function store()

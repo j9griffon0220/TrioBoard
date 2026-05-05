@@ -28,14 +28,22 @@
       <label class="font-body mb-[var(--s-4)] block text-base font-light text-board-charcoal">
         本文：
       </label>
+
       <textarea
-        wire:model="body"
+        wire:model.live="body"
         placeholder="投稿を入力してください"
         required
-        maxlength="400"
+        maxlength="1000"
         rows="5"
         class="mb-[var(--s1)] w-full resize-y border-2 border-gray-300 p-[var(--s-4)] focus:border-double-blue focus:outline-none"
       ></textarea>
+      {{-- Alpine.js文字数カウント --}}
+      <div class="mb-[var(--s1)] flex justify-end">
+        <p>
+          <span x-text="$wire.body.length"></span>
+          / 1000文字
+        </p>
+      </div>
 
       @error('body')
         <p class="font-body mb-[var(--s-3)] text-base font-normal text-double-red">

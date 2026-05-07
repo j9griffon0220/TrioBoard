@@ -1,8 +1,8 @@
 <div class="mb-[var(--s7)]">
   {{-- The best athlete wants his opponent at his best. --}}
-  <h1 class="mb-[var(--s4)] text-center font-title text-2xl font-medium text-double-blue">
+  <h2 class="mb-[var(--s4)] text-center font-title text-2xl font-medium text-double-blue">
     「{{ $thread->title }}」のポスト一覧
-  </h1>
+  </h2>
 
   @forelse ($posts as $post)
     {{-- postごとにまとめる --}}
@@ -22,7 +22,9 @@
         <p class="font-body mb-[var(--s-6)] text-base font-normal text-double-blue">
           {{ $post->title }}
         </p>
-        <p class="font-body text-base font-normal text-board-black">{{ $post->body }}</p>
+        <p class="font-body text-base font-normal break-all whitespace-pre-line text-board-black">
+          {{ $post->body }}
+        </p>
       </div>
     </div>
   @empty

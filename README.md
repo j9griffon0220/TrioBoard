@@ -1,7 +1,6 @@
 # Trio Board – Laravel 12 × Livewire × Pest
 
-[**デモサイトを見る**(#) ]（デプロイ準備中・公開後にURLを掲載予定）
-※現在はローカル環境で動作確認可能です。
+[サイトを見る](https://trioboard.onrender.com/)
 
 ## 概要 （Overview）
 
